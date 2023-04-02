@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
 
   //textColor
-  static const Color textColorLight = Color(0xFF000000);
+  static const Color textColorLight = Color(0xFF222222);
   static const Color textColorDark = Color(0xFFFAFAFA);
 
   //light mode
