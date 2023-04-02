@@ -10,7 +10,13 @@ class CustomerRepository implements ICustomersRepository {
 
   @override
   Future<int?> addCustomer(Customer customer) async {
-    int? result = await db.database?.insert(db.customerTable, customer.toJson());
+    int? result;
+    result = await db.database?.insert(
+      db.customerTable, customer.toJson(),
+    ).onError((error, stackTrace){
+      Debugger.debug(title: "CustomerRepository.addCustomer: onError", data: error,);
+      return -1;
+    });
     Debugger.debug(title: "CustomerRepository.addCustomer", data: result,);
     return result;
   }

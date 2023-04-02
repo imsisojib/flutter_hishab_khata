@@ -1,5 +1,5 @@
 class Order {
-  String? id;
+  int? id;
   double? total;
   double? paid;
   double? discount;
