@@ -7,8 +7,20 @@ import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class ScreenOrders extends StatelessWidget {
+class ScreenOrders extends StatefulWidget {
   const ScreenOrders({super.key});
+
+  @override
+  State<ScreenOrders> createState() => _ScreenOrdersState();
+}
+
+class _ScreenOrdersState extends State<ScreenOrders> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProviderOrders>(context,listen: false).fetchAllOrders();
+  }
 
   @override
   Widget build(BuildContext context) {

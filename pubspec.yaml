@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^10.0.1
   logger: ^1.1.0
   fluttertoast: ^8.0.9
+  flutter_sms: ^2.3.3
   
   sqflite: ^2.2.6
   intl: ^0.18.0
