@@ -30,8 +30,15 @@ class HishabDatabase{
 
         onUpgrade: (db,oldeVersion,newVersion){
           database = db;
-        }
+        },
+
+        onConfigure: _onConfigure,
     );
 
   }
+
+  static Future _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
 }
