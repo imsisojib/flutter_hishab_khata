@@ -48,4 +48,22 @@ class CustomerRepository implements ICustomersRepository {
     return result;
   }
 
+  @override
+  Future<Customer?> findCustomerById(String phoneNumber) async{
+    List<Map<String, Object?>>? result = await db.database?.query(
+      db.customerTable,
+      columns: ['phone_number', 'name', 'address', 'company_name'],
+      where: 'phone_number = ?',
+      whereArgs: [phoneNumber],
+      limit: 1,
+    );
+    Debugger.debug(title: "CustomerRepository.findCustomerById", data: result,);
+
+    if(result==null || result.isEmpty) return null;
+
+    Customer? customer = Customer.fromJson(result.first);
+
+    return customer;
+  }
+
 }

@@ -76,7 +76,7 @@ class _TextEditFormCardViewState extends State<TextEditFormCardView> {
                   widget.tittleText ?? "",
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: AppColors.grey400,
+                    color: AppColors.grey500,
                   ),
                 ),
                 TextFormField(

@@ -10,7 +10,7 @@ import 'package:flutter_hishab_khata/src/features/home/data/repositories/custome
 import 'package:flutter_hishab_khata/src/features/home/data/repositories/orders_repository.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_customer_repository.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
-import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_common.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_customers.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +44,9 @@ Future<void> init() async {
 
   ///PROVIDERS
   //region Providers
-  sl.registerFactory(() => ProviderCommon(),);
+  sl.registerFactory(() => ProviderCustomers(
+    customersRepository: sl(),
+  ),);
 
   //interceptors
   sl.registerLazySingleton<IApiInterceptor>(() => ApiInterceptor(baseUrl: ConfigApi.baseUrl));   ///CHANGE SERVER HERE

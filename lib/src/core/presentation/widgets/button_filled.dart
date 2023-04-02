@@ -69,6 +69,7 @@ class ButtonFilled extends StatelessWidget {
                 style: buttonTextStyle ??
                     theme.textTheme.bodyMedium?.copyWith(
                       color: AppColors.white,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
             ),

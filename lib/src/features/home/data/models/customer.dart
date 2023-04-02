@@ -3,6 +3,7 @@ class Customer {
   String? address;
   String? companyName;
   String? name;
+  String? createdAt;
 
   Customer({this.phoneNumber, this.address, this.companyName, this.name});
 
@@ -11,6 +12,7 @@ class Customer {
     address = json['address'];
     companyName = json['company_name'];
     name = json['name'];
+    createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class Customer {
     data['address'] = address;
     data['company_name'] = companyName;
     data['name'] = name;
+    data['created_at'] = createdAt;
     return data;
   }
 }

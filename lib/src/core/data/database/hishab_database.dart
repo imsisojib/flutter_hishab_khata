@@ -15,9 +15,9 @@ class HishabDatabase{
 
     await openDatabase(
         "$databasePath/$dbName",
-        version: 1,
+        version: 2,
         onCreate: (db,version) async{
-          var customerTableCreateSQL = "CREATE TABLE $customerTable (phone_number VARCHAR(11) PRIMARY KEY, name TEXT, address TEXT, company_name TEXT)";
+          var customerTableCreateSQL = "CREATE TABLE $customerTable (phone_number VARCHAR(11) PRIMARY KEY, name TEXT, address TEXT, company_name TEXT, created_at TEXT)";
           var ordersTableCreateSQL = "CREATE TABLE $ordersTable (id INTEGER PRIMARY KEY AUTOINCREMENT, total REAL, paid REAL, discount REAL, due REAL, phone_number VARCHAR, FOREIGN KEY(phone_number) REFERENCES $customerTable(phone_number))";
 
           await db.execute(customerTableCreateSQL);

@@ -5,4 +5,5 @@ abstract class ICustomersRepository{
   Future<int?> deleteCustomer(String phoneNumber);
   Future<int?> updateCustomer(Customer customer);
   Future<List<Customer>> fetchAllCustomers();
+  Future<Customer?> findCustomerById(String phoneNumber);
 }
