@@ -66,4 +66,14 @@ class CustomerRepository implements ICustomersRepository {
     return customer;
   }
 
+  @override
+  Future<int?> countTotalCustomers() async{
+    var result = await db.database?.rawQuery(
+      "SELECT COUNT(*) FROM ${db.customerTable}"
+    );
+    Debugger.debug(title: "CustomerRepository.countTotalCustomers", data: result,);
+
+    return result?.first['COUNT(*)'] as int?;
+  }
+
 }

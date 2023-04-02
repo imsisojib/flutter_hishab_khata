@@ -6,4 +6,5 @@ abstract class ICustomersRepository{
   Future<int?> updateCustomer(Customer customer);
   Future<List<Customer>> fetchAllCustomers();
   Future<Customer?> findCustomerById(String phoneNumber);
+  Future<int?> countTotalCustomers();
 }

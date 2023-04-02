@@ -9,17 +9,22 @@ import 'package:intl/intl.dart';
 class ProviderCustomers extends ChangeNotifier{
 
   final ICustomersRepository customersRepository;
-  ProviderCustomers({required this.customersRepository,});
+  ProviderCustomers({required this.customersRepository,}){
+    //call to find total customers
+    countTotalCustomers();
+  }
 
   //states
   Customer _customer = Customer();
   List<Customer> _allCustomers = [];
   bool _loading = false;
+  int _totalCustomerCount = 0;
 
   //getters
   Customer get customer => _customer;
   List<Customer> get allCustomers => _allCustomers;
   bool get loading => _loading;
+  int get totalCustomerCount => _totalCustomerCount;
 
   //setters
   set customer(Customer data){
@@ -28,6 +33,11 @@ class ProviderCustomers extends ChangeNotifier{
   }
   set loading(bool flag){
     _loading = flag;
+    notifyListeners();
+  }
+
+  set totalCustomerCount(int total){
+    _totalCustomerCount = total;
     notifyListeners();
   }
 
@@ -63,6 +73,7 @@ class ProviderCustomers extends ChangeNotifier{
       Fluttertoast.showToast(msg: "Success! Customer info is saved!");
       //update customer list
       fetchAllCustomers();
+      countTotalCustomers();
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
@@ -70,6 +81,11 @@ class ProviderCustomers extends ChangeNotifier{
 
     loading = false;
 
+  }
+
+  void countTotalCustomers() async{
+    totalCustomerCount = await customersRepository.countTotalCustomers()??0;
+    notifyListeners();
   }
 
 
