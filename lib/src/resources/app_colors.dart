@@ -17,7 +17,7 @@ class AppColors {
   static const Color onBackgroundColorLight = Color(0xFF000000);
   static const Color onSecondaryColorLight = Color(0xFF000000);
   static const Color backgroundColorLight = Color(0xFFEEF0F2);
-  static const Color scaffoldColorLight = Color(0xFFEEF0F2);
+  static const Color scaffoldColorLight = Color(0xFFF9F9F9);
   static const Color errorColorLight = Color(0xFFFF4C5D);
 
   //dark mode

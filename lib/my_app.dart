@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
           },
           title: 'MuseIQ',
           themeMode: ThemeMode.dark,
-          theme: buildDarkTheme(context),
+          theme: buildLightTheme(context),
           initialRoute: Routes.homeScreen,
           onGenerateRoute: RouterHelper.router.generator,
         );
