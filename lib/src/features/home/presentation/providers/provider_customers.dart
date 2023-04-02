@@ -74,6 +74,8 @@ class ProviderCustomers extends ChangeNotifier{
       //update customer list
       fetchAllCustomers();
       countTotalCustomers();
+      //clear cache
+      _customer = Customer();
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);

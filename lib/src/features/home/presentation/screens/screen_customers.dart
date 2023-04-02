@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/common_appbar.dart';
+import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_customers_screen_mode.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_customers.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ScreenCustomers extends StatefulWidget{
-  const ScreenCustomers({super.key});
+  final EnumCustomersScreenMode? mode;
+  const ScreenCustomers({super.key, this.mode});
 
   @override
   State<ScreenCustomers> createState() => _ScreenCustomersState();
@@ -64,6 +67,16 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate((_, index){
                     return ListTile(
+                      onTap: (){
+                        if(widget.mode == EnumCustomersScreenMode.selection){
+                          //selecting customer for creating order
+                          var data = Provider.of<ProviderOrders>(context,listen: false).order;
+                          data.customer = providerCustomers.allCustomers[index];
+                          data.phoneNumber = providerCustomers.allCustomers[index].phoneNumber;
+                          Provider.of<ProviderOrders>(context,listen: false).order = data;
+                          Navigator.pop(context);
+                        }
+                      },
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                       title: Text(
                           providerCustomers.allCustomers[index].phoneNumber??"",

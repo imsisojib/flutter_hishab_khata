@@ -1,0 +1,4 @@
+enum EnumCustomersScreenMode{
+  view,
+  selection,
+}

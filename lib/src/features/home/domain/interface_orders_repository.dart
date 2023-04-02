@@ -5,4 +5,5 @@ abstract class IOrdersRepository{
   Future<int?> deleteOrder(int orderId);
   Future<int?> updateOrder(Order order);
   Future<List<Order>> fetchAllOrders();
+  Future<int?> countTotalOrders();
 }

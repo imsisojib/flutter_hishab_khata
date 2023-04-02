@@ -60,4 +60,15 @@ class OrdersRepository implements IOrdersRepository {
     );
     return result;
   }
+
+  @override
+  Future<int?> countTotalOrders() async{
+    var result = await db.database?.rawQuery(
+        "SELECT COUNT(*) FROM ${db.ordersTable}"
+    );
+    Debugger.debug(title: "OrdersRepository.countTotalCustomers", data: result,);
+
+    return result?.first['COUNT(*)'] as int?;
+  }
+
 }
