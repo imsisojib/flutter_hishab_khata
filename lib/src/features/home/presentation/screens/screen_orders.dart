@@ -159,7 +159,7 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "${providerOrders.allOrders[index].total ?? 0}",
+                                  "${providerOrders.allOrders[index].due ?? 0}",
                                   style: theme.textTheme.titleSmall,
                                 ),
                               ],
