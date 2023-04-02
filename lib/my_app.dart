@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate_code/src/core/application/navigation_service.dart';
-import 'package:flutter_boilerplate_code/src/resources/app_themes.dart';
-import 'package:flutter_boilerplate_code/src/routes/router_helper.dart';
-import 'package:flutter_boilerplate_code/src/routes/routes.dart';
+import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
+import 'package:flutter_hishab_khata/src/resources/app_themes.dart';
+import 'package:flutter_hishab_khata/src/routes/router_helper.dart';
+import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'di_container.dart';

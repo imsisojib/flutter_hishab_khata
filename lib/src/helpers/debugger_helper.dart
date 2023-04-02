@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_boilerplate_code/di_container.dart';
+import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:logger/logger.dart';
 
 class Debugger{

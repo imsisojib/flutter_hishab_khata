@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter_boilerplate_code/src/features/errors/presentation/screens/screen_error.dart';
-import 'package:flutter_boilerplate_code/src/features/home/presentation/screens/screen_home.dart';
-import 'package:flutter_boilerplate_code/src/routes/routes.dart';
+import 'package:flutter_hishab_khata/src/features/errors/presentation/screens/screen_error.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_home.dart';
+import 'package:flutter_hishab_khata/src/routes/routes.dart';
 
 
 class RouterHelper {

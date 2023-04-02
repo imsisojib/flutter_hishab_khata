@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.your_org.your_project_id.flutter_oilerplate_code">
    <application
-        android:label="flutter_oilerplate_code"
+        android:label="Hishab Khata"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

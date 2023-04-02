@@ -1,6 +1,6 @@
-import 'package:flutter_boilerplate_code/src/core/domain/interfaces/interface_api_interceptor.dart';
-import 'package:flutter_boilerplate_code/src/helpers/connectivity_helper.dart';
-import 'package:flutter_boilerplate_code/src/helpers/debugger_helper.dart';
+import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
+import 'package:flutter_hishab_khata/src/helpers/connectivity_helper.dart';
+import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:http/http.dart' as http;
 
 class ApiInterceptor implements IApiInterceptor {
