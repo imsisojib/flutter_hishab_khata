@@ -4,13 +4,16 @@ import 'package:flutter_hishab_khata/src/core/application/navigation_service.dar
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-class ProviderOrders extends ChangeNotifier{
-
+class ProviderOrders extends ChangeNotifier {
   final IOrdersRepository ordersRepository;
-  ProviderOrders({required this.ordersRepository,}){
+
+  ProviderOrders({
+    required this.ordersRepository,
+  }) {
     //call to find total customers
     countTotalOrders();
   }
@@ -23,44 +26,48 @@ class ProviderOrders extends ChangeNotifier{
 
   //getters
   Order get order => _order;
+
   List<Order> get allOrders => _allOrders;
+
   bool get loading => _loading;
+
   int get totalOrdersCount => _totalOrdersCount;
 
   //setters
-  set order(Order data){
+  set order(Order data) {
     _order = data;
-    try{
-      _order.due = _order.total!-_order.paid!-_order.discount!;
-    }catch(e){
+    try {
+      _order.due = _order.total! - _order.paid! - _order.discount!;
+    } catch (e) {
       Debugger.debug(title: "ProviderOrders.dueCalculation: error", data: e);
     }
     notifyListeners();
   }
-  set loading(bool flag){
+
+  set loading(bool flag) {
     _loading = flag;
     notifyListeners();
   }
 
-  set totalOrdersCount(int total){
+  set totalOrdersCount(int total) {
     _totalOrdersCount = total;
     notifyListeners();
   }
 
   //methods
-  void fetchAllOrders() async{
+  void fetchAllOrders() async {
     _allOrders.clear();
     _allOrders = await ordersRepository.fetchAllOrders();
     notifyListeners();
   }
 
-  void saveOrder() async{
-    if(_order.phoneNumber?.length!=11){
+  void saveOrder() async {
+    if (_order.phoneNumber?.length != 11) {
       Fluttertoast.showToast(msg: "Invalid customer phone number!");
       return;
     }
 
-    if(_order.total==null || _order.total!<=0){
+    if (_order.total == null || _order.total! <= 0) {
       Fluttertoast.showToast(msg: "Check input data again!");
       return;
     }
@@ -70,11 +77,10 @@ class ProviderOrders extends ChangeNotifier{
     //update date
     _order.createdAt = DateFormat('yyyy-MM-dd').format(DateTime.now());
     int? result = await ordersRepository.addOrder(_order);
-    if(result==null || result<=-1){
+    if (result == null || result <= -1) {
       //means not saved
       Fluttertoast.showToast(msg: "Failed to save order!");
-
-    }else{
+    } else {
       //means success
       Fluttertoast.showToast(msg: "Success! Order is saved!");
       //update customer list
@@ -83,17 +89,46 @@ class ProviderOrders extends ChangeNotifier{
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
+      sendSmsToCustomer(order);
+
+      _order = Order();
     }
 
     loading = false;
-
   }
 
-  void countTotalOrders() async{
-    totalOrdersCount = await ordersRepository.countTotalOrders()??0;
+  void countTotalOrders() async {
+    totalOrdersCount = await ordersRepository.countTotalOrders() ?? 0;
     notifyListeners();
   }
 
+  void sendSmsToCustomer(Order order) async {
+    String message = "Date: ${order.createdAt}"
+        "\nOrder by: ${order.phoneNumber}"
+        "\nTotal Amount: ${order.total}"
+        "\nPaid: ${order.paid ?? 0}"
+        "\nDiscount: ${order.discount ?? 0}"
+        "\nDue: ${order.due??0}";
 
+    List<String> recipients = [
+      "+88${order.phoneNumber}",
+    ];
 
+    String result = await sendSMS(
+      message: message,
+      recipients: recipients,
+    ).catchError(
+      (error) async{
+        Debugger.debug(
+          title: "SendingSMS: result",
+          data: error,
+        );
+        return error;
+      },
+    );
+    Debugger.debug(
+      title: "SendingSMS: result",
+      data: result,
+    );
+  }
 }

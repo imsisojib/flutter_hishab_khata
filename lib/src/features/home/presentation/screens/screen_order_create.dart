@@ -46,7 +46,7 @@ class ScreenOrderCreate extends StatelessWidget {
                           },
                         ),
                         SizedBox(height: 8.h,),
-                        ListTile(
+                        providerOrders.order.customer==null?const SizedBox():ListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                           title: Text(
                             providerOrders.order.customer?.phoneNumber??"",
