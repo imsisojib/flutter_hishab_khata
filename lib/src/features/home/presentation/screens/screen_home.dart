@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
+import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScreenHome extends StatelessWidget {
@@ -38,7 +39,7 @@ class ScreenHome extends StatelessWidget {
                       Expanded(
                         child: InkWell(
                           onTap: (){
-
+                            Navigator.pushNamed(context, Routes.ordersScreen,);
                           },
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -74,7 +75,7 @@ class ScreenHome extends StatelessWidget {
                       Expanded(
                         child: InkWell(
                           onTap: (){
-
+                            Navigator.pushNamed(context, Routes.customersScreen,);
                           },
                           child: Card(
                             shape: RoundedRectangleBorder(
