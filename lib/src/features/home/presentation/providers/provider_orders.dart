@@ -103,7 +103,8 @@ class ProviderOrders extends ChangeNotifier {
   }
 
   void sendSmsToCustomer(Order order) async {
-    String message = "Date: ${order.createdAt}"
+    String message = "MI Enterprise"
+        "Date: ${order.createdAt}"
         "\nOrder by: ${order.phoneNumber}"
         "\nTotal Amount: ${order.total}"
         "\nPaid: ${order.paid ?? 0}"
