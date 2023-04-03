@@ -20,7 +20,7 @@ class WidgetHelper{
       barrierLabel: "ConfirmationDialog",
       //barrierColor: Colors.transparent,
       context: sl<NavigationService>().navigatorKey.currentContext!,
-      builder: (context) {
+      builder: (_) {
         return _BlurryDialog(
           alertDialog: AlertDialog(
             backgroundColor: theme.cardColor,
@@ -56,7 +56,7 @@ class WidgetHelper{
                 width: 70.w,
                 strokeColor: const Color(0xff5A4080),
                 function: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
                 },
                 buttonText: 'No',
                 buttonTextStyle: theme.textTheme.bodySmall,
@@ -66,7 +66,7 @@ class WidgetHelper{
                 width: 70.w,
                 buttonText: "Yes",
                 function: () {
-                  Navigator.pop(context);
+                  Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
                   onPositiveAction.call();
                 },
                 buttonTextStyle: theme.textTheme.bodySmall?.copyWith(

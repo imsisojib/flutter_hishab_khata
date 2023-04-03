@@ -244,8 +244,9 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                             description: "Do you want to delete this order?",
                                             onPositiveAction: (){
                                               //confirm delete
-                                              providerOrders.deleteOrder(
-                                                  providerOrders.allOrders[index].id,
+                                              providerOrders.deleteOrderAndFetchAllOrdersByPhoneNumber(
+                                                providerOrders.allOrders[index].id,
+                                                widget.phoneNumber,
                                               );
                                             }
                                           );

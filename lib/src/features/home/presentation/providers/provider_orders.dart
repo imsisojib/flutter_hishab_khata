@@ -117,7 +117,7 @@ class ProviderOrders extends ChangeNotifier {
 
   void sendSmsToCustomer(Order order) async {
     String message = "MI Enterprise"
-        "Date: ${order.createdAt}"
+        "\nDate: ${order.createdAt}"
         "\nOrder by: ${order.phoneNumber}"
         "\nTotal Amount: ${order.total}"
         "\nPaid: ${order.paid ?? 0}"
@@ -157,5 +157,16 @@ class ProviderOrders extends ChangeNotifier {
 
   Future<Order?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async{
     return await ordersRepository.totalOrdersInfoByPhoneNumber(phoneNumber??"");
+  }
+
+  void deleteOrderAndFetchAllOrdersByPhoneNumber(int? id, String? phoneNumber) async{
+    if(phoneNumber==null || id==null){
+      Fluttertoast.showToast(msg: "Try again later!");
+      return;
+    }
+
+    await ordersRepository.deleteOrder(id);
+    fetchAllOrdersByPhoneNumber(phoneNumber);
+    countTotalOrders();
   }
 }
