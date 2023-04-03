@@ -154,4 +154,8 @@ class ProviderOrders extends ChangeNotifier {
     countTotalOrders();
 
   }
+
+  Future<Order?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async{
+    return await ordersRepository.totalOrdersInfoByPhoneNumber(phoneNumber??"");
+  }
 }

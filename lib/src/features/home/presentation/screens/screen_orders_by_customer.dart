@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/common_appbar.dart';
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/horizontal_divider.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/customer.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_order_action.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/widgets/common_popup_menu_widget.dart';
@@ -60,6 +61,104 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                     height: 16.h,
                   ),
                 ),
+                SliverToBoxAdapter(
+                  child: FutureBuilder(
+                    future: providerOrders.fetchTotalOrdersInfoByPhoneNumber(widget.phoneNumber),
+                    builder: (_, AsyncSnapshot response){
+                      Order? order = response.data;
+                      if(order==null){
+                        return const SizedBox();
+                      }
+                      return Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.grey400,),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            margin: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "Total Calculation",
+                                    style: theme.textTheme.titleSmall,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Total Amount",
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                    Text(
+                                      "${order.total ?? 0}",
+                                      style: theme.textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Paid",
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                    Text(
+                                      "${order.paid ?? 0}",
+                                      style: theme.textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Discount",
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                    Text(
+                                      "${order.discount ?? 0}",
+                                      style: theme.textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                const HorizontalDivider(),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Due",
+                                      style: theme.textTheme.bodySmall,
+                                    ),
+                                    Text(
+                                      "${order.due ?? 0}",
+                                      style: theme.textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          HorizontalDivider(height: 2,),
+                          SizedBox(height: 2.h,),
+                          HorizontalDivider(height: 2,),
+                          SizedBox(height: 8.h,),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
                 SliverList(
                   delegate: SliverChildBuilderDelegate((_, index) {
                     return Card(
@@ -86,7 +185,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              widget.name ?? "",
+                                              providerOrders.allOrders[index].name ?? "",
                                               style: theme.textTheme.titleSmall,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,

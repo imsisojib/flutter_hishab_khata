@@ -6,5 +6,6 @@ abstract class IOrdersRepository{
   Future<int?> updateOrder(Order order);
   Future<List<Order>> fetchAllOrders();
   Future<List<Order>> fetchAllOrdersByPhoneNumber(String phoneNumber);
+  Future<Order?> totalOrdersInfoByPhoneNumber(String phoneNumber);
   Future<int?> countTotalOrders();
 }

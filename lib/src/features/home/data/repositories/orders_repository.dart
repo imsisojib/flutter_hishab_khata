@@ -70,12 +70,12 @@ class OrdersRepository implements IOrdersRepository {
       title: "OrdersRepository.fetchAllOrdersByPhoneNumber: request",
       data: phoneNumber,
     );
-    List<Map<String, Object?>>? mapList = await db.database?.query(
+    /*List<Map<String, Object?>>? mapList = await db.database?.query(
       db.ordersTable,
       where: 'phone_number = ?',
       whereArgs: [phoneNumber],
-    );
-    /*List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
+    );*/
+    List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
         """SELECT
         ${db.ordersTable}.id as id,
         ${db.ordersTable}.total as total,
@@ -88,9 +88,10 @@ class OrdersRepository implements IOrdersRepository {
         FROM ${db.ordersTable}
         LEFT JOIN ${db.customerTable}
         ON ${db.ordersTable}.phone_number = ${db.customerTable}.phone_number
-        WHERE ${db.ordersTable}.phone_number = $phoneNumber
-        """
-    );*/
+        WHERE ${db.ordersTable}.phone_number = ?
+        """,
+        [phoneNumber]
+    );
     Debugger.debug(
       title: "OrdersRepository.fetchAllOrdersByPhoneNumber",
       data: mapList,
@@ -101,6 +102,36 @@ class OrdersRepository implements IOrdersRepository {
       ordersList.add(Order.fromJson(item));
     }
     return ordersList;
+  }
+
+  @override
+  Future<Order?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
+    Debugger.debug(
+      title: "OrdersRepository.totalOrdersInfoByPhoneNumber: request",
+      data: phoneNumber,
+    );
+    /*List<Map<String, Object?>>? mapList = await db.database?.query(
+      db.ordersTable,
+      where: 'phone_number = ?',
+      whereArgs: [phoneNumber],
+    );*/
+    List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
+        """SELECT
+        SUM(${db.ordersTable}.total) as total,
+        SUM(${db.ordersTable}.paid) as paid,
+        SUM(${db.ordersTable}.discount) as discount,
+        SUM(${db.ordersTable}.due) as due
+        FROM ${db.ordersTable}
+        WHERE phone_number = ?
+        """,
+      [phoneNumber],
+    );
+    Debugger.debug(
+      title: "OrdersRepository.totalOrdersInfoByPhoneNumber: result",
+      data: mapList,
+    );
+
+    return Order.fromJson(mapList?.first??{});
   }
 
   @override
