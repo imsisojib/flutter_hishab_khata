@@ -9,6 +9,7 @@ class Order {
   String? phoneNumber;
   String? createdAt;
   Customer? customer; //local usages only
+  String? name; //customer name, only for showing
 
   Order(
       {this.id,
@@ -26,6 +27,7 @@ class Order {
     due = json['due'];
     phoneNumber = json['phone_number'];
     createdAt = json['created_at'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {

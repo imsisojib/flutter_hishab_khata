@@ -63,6 +63,7 @@ class _ScreenOrdersState extends State<ScreenOrders> {
             }
 
             return CustomScrollView(
+              physics: const BouncingScrollPhysics(),
               slivers: [
                 SliverToBoxAdapter(
                   child: SizedBox(
@@ -85,12 +86,28 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                             Row(
                               children: [
                                 Text(
-                                  "Customer: ",
+                                  "Name: ",
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    providerOrders.allOrders[index].name ?? "",
+                                    style: theme.textTheme.titleSmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Phone Number: ",
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
                                   providerOrders.allOrders[index].phoneNumber ?? "",
-                                  style: theme.textTheme.titleMedium,
+                                  style: theme.textTheme.titleSmall,
                                 ),
                               ],
                             ),
@@ -98,11 +115,17 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                               children: [
                                 Text(
                                   "Ordered On: ",
-                                  style: theme.textTheme.bodySmall,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: AppColors.grey500,
+                                    fontStyle: FontStyle.italic
+                                  ),
                                 ),
                                 Text(
                                   providerOrders.allOrders[index].createdAt ?? "",
-                                  style: theme.textTheme.bodySmall,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: AppColors.grey500,
+                                      fontStyle: FontStyle.italic
+                                  ),
                                 ),
                               ],
                             ),
@@ -170,6 +193,11 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                     );
                   }, childCount: providerOrders.allOrders.length),
                 ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: kToolbarHeight,
+                  ),
+                )
               ],
             );
           },
