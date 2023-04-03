@@ -131,4 +131,13 @@ class ProviderOrders extends ChangeNotifier {
       data: result,
     );
   }
+
+  void deleteOrder(int? id) async{
+    if(id==null) return;
+
+    await ordersRepository.deleteOrder(id);
+    fetchAllOrders();
+    countTotalOrders();
+
+  }
 }

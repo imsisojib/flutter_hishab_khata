@@ -49,7 +49,7 @@ class OrdersRepository implements IOrdersRepository {
         ${db.ordersTable}.phone_number as phone_number,
         (SELECT ${db.customerTable}.name FROM ${db.customerTable}
         WHERE ${db.customerTable}.phone_number = ${db.ordersTable}.phone_number) as name
-        FROM ${db.ordersTable}, ${db.customerTable}"""
+        FROM ${db.ordersTable}"""
     );
     Debugger.debug(
       title: "OrdersRepository.fetchAllOrders",

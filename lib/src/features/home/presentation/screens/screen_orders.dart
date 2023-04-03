@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/common_appbar.dart';
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/horizontal_divider.dart';
+import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_order_action.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/widgets/common_popup_menu_widget.dart';
+import 'package:flutter_hishab_khata/src/helpers/widget_helper.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +18,10 @@ class ScreenOrders extends StatefulWidget {
 }
 
 class _ScreenOrdersState extends State<ScreenOrders> {
-
   @override
   void initState() {
     super.initState();
-    Provider.of<ProviderOrders>(context,listen: false).fetchAllOrders();
+    Provider.of<ProviderOrders>(context, listen: false).fetchAllOrders();
   }
 
   @override
@@ -85,47 +87,102 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  "Name: ",
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    providerOrders.allOrders[index].name ?? "",
-                                    style: theme.textTheme.titleSmall,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Name: ",
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              providerOrders.allOrders[index].name ?? "",
+                                              style: theme.textTheme.titleSmall,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Phone Number: ",
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                          Text(
+                                            providerOrders.allOrders[index].phoneNumber ?? "",
+                                            style: theme.textTheme.titleSmall,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Ordered On: ",
+                                            style: theme.textTheme.bodySmall?.copyWith(
+                                                color: AppColors.grey500,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            providerOrders.allOrders[index].createdAt ?? "",
+                                            style: theme.textTheme.bodySmall?.copyWith(
+                                                color: AppColors.grey500,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Phone Number: ",
-                                  style: theme.textTheme.bodySmall,
-                                ),
-                                Text(
-                                  providerOrders.allOrders[index].phoneNumber ?? "",
-                                  style: theme.textTheme.titleSmall,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Ordered On: ",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.grey500,
-                                    fontStyle: FontStyle.italic
-                                  ),
-                                ),
-                                Text(
-                                  providerOrders.allOrders[index].createdAt ?? "",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.grey500,
-                                      fontStyle: FontStyle.italic
-                                  ),
+                                PopupMenuButton<EnumOrderAction>(
+                                  constraints: const BoxConstraints(),
+                                  padding: EdgeInsets.zero,
+                                  iconSize: 18,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.h)),
+                                  onSelected: (EnumOrderAction action) async {
+                                    switch (action) {
+                                      case EnumOrderAction.update:
+                                        {
+
+                                          return;
+                                        }
+                                      case EnumOrderAction.delete:
+                                        {
+                                          WidgetHelper.showDialogForConfirmation(
+                                            title: "Confirmation",
+                                            description: "Do you want to delete this order?",
+                                            onPositiveAction: (){
+                                              //confirm delete
+                                              providerOrders.deleteOrder(
+                                                  providerOrders.allOrders[index].id,
+                                              );
+                                            }
+                                          );
+                                          return;
+                                        }
+                                      default:
+                                    }
+                                  },
+                                  itemBuilder: (_) => <PopupMenuEntry<EnumOrderAction>>[
+                                    /*const PopupMenuItem<EnumOrderAction>(
+                                      value: EnumOrderAction.update,
+                                      child: CommonPopupMenuWidget(
+                                        iconData: Icons.edit,
+                                        name: "Update Order",
+                                      ),
+                                    ),*/
+                                    const PopupMenuItem<EnumOrderAction>(
+                                      value: EnumOrderAction.delete,
+                                      child: CommonPopupMenuWidget(
+                                        iconData: Icons.delete_rounded,
+                                        name: "Delete Order",
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -171,9 +228,13 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 4.h,),
+                            SizedBox(
+                              height: 4.h,
+                            ),
                             const HorizontalDivider(),
-                            SizedBox(height: 4.h,),
+                            SizedBox(
+                              height: 4.h,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
