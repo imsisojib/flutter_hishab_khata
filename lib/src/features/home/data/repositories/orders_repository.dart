@@ -20,8 +20,11 @@ class OrdersRepository implements IOrdersRepository {
 
   @override
   Future<int?> deleteOrder(int orderId) async {
-    int? result = await db.database?.delete(db.ordersTable,
-        where: 'id = ?', whereArgs: [orderId]).onError((error, stackTrace) {
+    int? result = await db.database?.delete(
+      db.ordersTable,
+      where: 'id = ?',
+      whereArgs: [orderId],
+    ).onError((error, stackTrace) {
       Debugger.debug(
         title: "OrdersRepository.deleteOrder: onError",
         data: error,
@@ -38,8 +41,7 @@ class OrdersRepository implements IOrdersRepository {
   @override
   Future<List<Order>> fetchAllOrders() async {
     //List<Map<String, Object?>>? mapList = await db.database?.query(db.ordersTable);
-    List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
-      """SELECT
+    List<Map<String, Object?>>? mapList = await db.database?.rawQuery("""SELECT
         ${db.ordersTable}.id as id,
         ${db.ordersTable}.total as total,
         ${db.ordersTable}.paid as paid,
@@ -49,10 +51,48 @@ class OrdersRepository implements IOrdersRepository {
         ${db.ordersTable}.phone_number as phone_number,
         (SELECT ${db.customerTable}.name FROM ${db.customerTable}
         WHERE ${db.customerTable}.phone_number = ${db.ordersTable}.phone_number) as name
-        FROM ${db.ordersTable}"""
-    );
+        FROM ${db.ordersTable}""");
     Debugger.debug(
       title: "OrdersRepository.fetchAllOrders",
+      data: mapList,
+    );
+
+    List<Order> ordersList = [];
+    for (Map<String, Object?> item in mapList!) {
+      ordersList.add(Order.fromJson(item));
+    }
+    return ordersList;
+  }
+
+  @override
+  Future<List<Order>> fetchAllOrdersByPhoneNumber(String phoneNumber) async {
+    Debugger.debug(
+      title: "OrdersRepository.fetchAllOrdersByPhoneNumber: request",
+      data: phoneNumber,
+    );
+    List<Map<String, Object?>>? mapList = await db.database?.query(
+      db.ordersTable,
+      where: 'phone_number = ?',
+      whereArgs: [phoneNumber],
+    );
+    /*List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
+        """SELECT
+        ${db.ordersTable}.id as id,
+        ${db.ordersTable}.total as total,
+        ${db.ordersTable}.paid as paid,
+        ${db.ordersTable}.discount as discount,
+        ${db.ordersTable}.due as due,
+        ${db.ordersTable}.created_at as created_at,
+        ${db.ordersTable}.phone_number as phone_number,
+        ${db.customerTable}.name as name
+        FROM ${db.ordersTable}
+        LEFT JOIN ${db.customerTable}
+        ON ${db.ordersTable}.phone_number = ${db.customerTable}.phone_number
+        WHERE ${db.ordersTable}.phone_number = $phoneNumber
+        """
+    );*/
+    Debugger.debug(
+      title: "OrdersRepository.fetchAllOrdersByPhoneNumber",
       data: mapList,
     );
 
@@ -75,13 +115,13 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
-  Future<int?> countTotalOrders() async{
-    var result = await db.database?.rawQuery(
-        "SELECT COUNT(*) FROM ${db.ordersTable}"
+  Future<int?> countTotalOrders() async {
+    var result = await db.database?.rawQuery("SELECT COUNT(*) FROM ${db.ordersTable}");
+    Debugger.debug(
+      title: "OrdersRepository.countTotalCustomers",
+      data: result,
     );
-    Debugger.debug(title: "OrdersRepository.countTotalCustomers", data: result,);
 
     return result?.first['COUNT(*)'] as int?;
   }
-
 }

@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
           themeMode: ThemeMode.dark,
           theme: buildLightTheme(context),
           initialRoute: Routes.homeScreen,
+          //initialRoute: Routes.getOrdersByCustomerScreenRoute("01779685922"),
           onGenerateRoute: RouterHelper.router.generator,
         );
       },

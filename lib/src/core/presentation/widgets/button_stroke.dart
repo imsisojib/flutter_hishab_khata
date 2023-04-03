@@ -6,7 +6,7 @@ class ButtonStroke extends StatelessWidget {
   final Color? strokeColor;
   final String? buttonText;
   final Color? buttonColor;
-  final double width;
+  final double? width;
   final double height;
   final double borderRadius;
   final TextStyle? buttonTextStyle;
@@ -16,7 +16,7 @@ class ButtonStroke extends StatelessWidget {
       {Key? key,
       this.buttonText,
       this.buttonColor,
-      this.width = 100,
+      this.width,
       this.height = 48,
       this.borderRadius = 25,
       this.buttonTextStyle,
@@ -29,7 +29,7 @@ class ButtonStroke extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      width: width,
+      width: width??MediaQuery.of(context).size.width,
       height: height,
       decoration: BoxDecoration(
           color: buttonColor ?? Colors.transparent,
@@ -40,8 +40,9 @@ class ButtonStroke extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
       child: MaterialButton(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         onPressed: () {
+          Navigator.pop(context);
           function?.call();
         },
         child: Text(

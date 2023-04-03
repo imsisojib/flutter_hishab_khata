@@ -61,6 +61,19 @@ class ProviderOrders extends ChangeNotifier {
     notifyListeners();
   }
 
+  void fetchAllOrdersByPhoneNumber(String? phoneNumber) async {
+    loading = true;
+    _allOrders.clear();
+    if(phoneNumber==null){
+      loading = false;
+      return;
+    }
+
+    _allOrders = await ordersRepository.fetchAllOrdersByPhoneNumber(phoneNumber);
+    loading = false;
+    notifyListeners();
+  }
+
   void saveOrder() async {
     if (_order.phoneNumber?.length != 11) {
       Fluttertoast.showToast(msg: "Invalid customer phone number!");

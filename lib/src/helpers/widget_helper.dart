@@ -80,6 +80,41 @@ class WidgetHelper{
     );
   }
 
+  static void showDialogWithDynamicContent({
+    required Widget content,
+  }) {
+    final theme =
+    Theme.of(sl<NavigationService>().navigatorKey.currentContext!);
+    showDialog(
+      barrierLabel: "ConfirmationDialog",
+      //barrierColor: Colors.transparent,
+      context: sl<NavigationService>().navigatorKey.currentContext!,
+      builder: (context) {
+        return _BlurryDialog(
+          alertDialog: AlertDialog(
+            backgroundColor: theme.cardColor,
+            shadowColor: const Color(0xff6B3CB0).withOpacity(.7),
+            elevation: 7,
+            //backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: const BorderSide(
+                strokeAlign: 2,
+                style: BorderStyle.solid,
+                color: Color(0xff8148C3),
+              ),
+            ),
+            //titlePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            //contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            //insetPadding: EdgeInsets.zero,
+            buttonPadding: const EdgeInsets.all(16),
+            content: content,
+          ),
+        );
+      },
+    );
+  }
+
 
 }
 

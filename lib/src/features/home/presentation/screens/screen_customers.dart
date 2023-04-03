@@ -3,13 +3,17 @@ import 'package:flutter_hishab_khata/src/core/presentation/widgets/common_appbar
 import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_customers_screen_mode.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_customers.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_orders_by_customer.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/widgets/popups/popup_customer_actions.dart';
+import 'package:flutter_hishab_khata/src/helpers/widget_helper.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class ScreenCustomers extends StatefulWidget{
+class ScreenCustomers extends StatefulWidget {
   final EnumCustomersScreenMode? mode;
+
   const ScreenCustomers({super.key, this.mode});
 
   @override
@@ -17,13 +21,13 @@ class ScreenCustomers extends StatefulWidget{
 }
 
 class _ScreenCustomersState extends State<ScreenCustomers> {
-
   @override
   void initState() {
     super.initState();
 
-    Provider.of<ProviderCustomers>(context,listen: false).fetchAllCustomers();
-
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ProviderCustomers>(context, listen: false).fetchAllCustomers();
+    });
   }
 
   @override
@@ -36,10 +40,13 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
         actionWidgets: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, Routes.customerCreateScreen,);
+              Navigator.pushNamed(
+                context,
+                Routes.customerCreateScreen,
+              );
             },
             icon: Text(
-              "Add New",
+              "New",
               style: theme.textTheme.bodySmall?.copyWith(
                 fontStyle: FontStyle.italic,
                 color: Colors.blue,
@@ -50,36 +57,77 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
       ),
       body: SafeArea(
         child: Consumer<ProviderCustomers>(
-          builder: (_, providerCustomers, child){
-            if(providerCustomers.loading){
-              return const Center(child: CircularProgressIndicator(),);
+          builder: (_, providerCustomers, child) {
+            if (providerCustomers.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
-            if(providerCustomers.allCustomers.isEmpty){
-              return const Center(child: Text("No customers found!"),);
+            if (providerCustomers.allCustomers.isEmpty) {
+              return const Center(
+                child: Text("No customers found!"),
+              );
             }
 
             return CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
-                  child: SizedBox(height: 16.h,),
+                  child: SizedBox(
+                    height: 16.h,
+                  ),
                 ),
                 SliverList(
-                  delegate: SliverChildBuilderDelegate((_, index){
+                  delegate: SliverChildBuilderDelegate((_, index) {
                     return ListTile(
-                      onTap: (){
-                        if(widget.mode == EnumCustomersScreenMode.selection){
+                      onTap: () {
+                        if (widget.mode == EnumCustomersScreenMode.selection) {
                           //selecting customer for creating order
-                          var data = Provider.of<ProviderOrders>(context,listen: false).order;
+                          var data = Provider.of<ProviderOrders>(context, listen: false).order;
                           data.customer = providerCustomers.allCustomers[index];
                           data.phoneNumber = providerCustomers.allCustomers[index].phoneNumber;
-                          Provider.of<ProviderOrders>(context,listen: false).order = data;
-                          Navigator.pop(context);
+                          Provider.of<ProviderOrders>(context, listen: false).order = data;
+                          Navigator.popAndPushNamed(context, Routes.orderCreateScreen,);
+                        }else{
+                          WidgetHelper.showDialogWithDynamicContent(
+                            content: PopupCustomerActions(
+                              onViewOrders: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.getOrdersByCustomerScreenRoute(
+                                      providerCustomers.allCustomers[index].phoneNumber??"",
+                                      providerCustomers.allCustomers[index].name??"",
+                                  ),
+                                );
+                              },
+                            ),
+                          );
                         }
                       },
+                      /*onLongPress: () {
+                        if (widget.mode != EnumCustomersScreenMode.selection) {
+                          WidgetHelper.showDialogWithDynamicContent(
+                            content: PopupCustomerActions(
+                              onViewOrders: () {
+                                WidgetHelper.showDialogWithDynamicContent(
+                                  content: PopupCustomerActions(
+                                    onViewOrders: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Routes.getOrdersByCustomerScreenRoute(
+                                            providerCustomers.allCustomers[index].phoneNumber!),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },*/
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                       title: Text(
-                          providerCustomers.allCustomers[index].phoneNumber??"",
+                        providerCustomers.allCustomers[index].phoneNumber ?? "",
                         style: theme.textTheme.headlineSmall,
                       ),
                       subtitle: Column(
@@ -87,20 +135,22 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            providerCustomers.allCustomers[index].name??"",
+                            providerCustomers.allCustomers[index].name ?? "",
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 4.h,),
+                          SizedBox(
+                            height: 4.h,
+                          ),
                           Text(
-                            providerCustomers.allCustomers[index].companyName??"",
+                            providerCustomers.allCustomers[index].companyName ?? "",
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontStyle: FontStyle.italic,
                             ),
                           ),
                           Text(
-                            providerCustomers.allCustomers[index].address??"",
+                            providerCustomers.allCustomers[index].address ?? "",
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontStyle: FontStyle.italic,
                             ),
@@ -116,7 +166,7 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                             ),
                           ),
                           Text(
-                            providerCustomers.allCustomers[index].createdAt??"N/A",
+                            providerCustomers.allCustomers[index].createdAt ?? "N/A",
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: AppColors.grey600,
                             ),
@@ -124,13 +174,10 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                         ],
                       ),
                     );
-                  },
-                    childCount: providerCustomers.allCustomers.length
-                  ),
+                  }, childCount: providerCustomers.allCustomers.length),
                 ),
               ],
             );
-
           },
         ),
       ),

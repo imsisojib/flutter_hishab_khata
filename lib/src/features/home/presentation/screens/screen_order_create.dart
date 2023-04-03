@@ -7,6 +7,7 @@ import 'package:flutter_hishab_khata/src/core/presentation/widgets/texteditform_
 import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_customers_screen_mode.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_customers.dart';
+import 'package:flutter_hishab_khata/src/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -37,12 +38,7 @@ class ScreenOrderCreate extends StatelessWidget {
                           width: MediaQuery.of(context).size.width,
                           buttonText: "Select Customer",
                           function: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_)=> const ScreenCustomers(mode: EnumCustomersScreenMode.selection,),
-                              ),
-                            );
+                            Navigator.pushNamed(context, Routes.getCustomersScreenRoute(EnumCustomersScreenMode.selection),);
                           },
                         ),
                         SizedBox(height: 8.h,),
