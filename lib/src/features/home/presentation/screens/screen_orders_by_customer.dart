@@ -37,6 +37,30 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
       appBar: CommonAppBar(
         tittle: "Orders History",
         preferredSize: Size(MediaQuery.of(context).size.width, kToolbarHeight),
+        actionWidgets: [
+          IconButton(
+            onPressed: () {
+              var data = Provider.of<ProviderOrders>(context, listen: false).order;
+              data.customer = Customer(
+                name: widget.name,
+                phoneNumber: widget.phoneNumber,
+              );
+              data.phoneNumber = widget.phoneNumber;
+              Provider.of<ProviderOrders>(context, listen: false).order = data;
+              Navigator.pushNamed(
+                context,
+                Routes.orderCreateScreen,
+              );
+            },
+            icon: Text(
+              "New",
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Consumer<ProviderOrders>(

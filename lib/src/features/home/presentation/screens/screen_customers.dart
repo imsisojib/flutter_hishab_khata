@@ -3,7 +3,6 @@ import 'package:flutter_hishab_khata/src/core/presentation/widgets/common_appbar
 import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_customers_screen_mode.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_customers.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
-import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_orders_by_customer.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/widgets/popups/popup_customer_actions.dart';
 import 'package:flutter_hishab_khata/src/helpers/widget_helper.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
