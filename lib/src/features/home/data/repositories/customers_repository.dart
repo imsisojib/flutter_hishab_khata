@@ -43,12 +43,30 @@ class CustomerRepository implements ICustomersRepository {
 
   @override
   Future<List<Customer>> fetchAllCustomers() async {
-    List<Map<String, Object?>>? mapList = await db.database?.query(
-      db.customerTable,
-      orderBy: "name ASC"
-    );
+    List<Map<String, Object?>>? mapList =
+        await db.database?.query(db.customerTable, orderBy: "name ASC");
     Debugger.debug(
       title: "CustomersRepository.fetchAllCustomers",
+      data: mapList,
+    );
+
+    List<Customer> customersList = [];
+    for (Map<String, Object?> item in mapList!) {
+      customersList.add(Customer.fromJson(item));
+    }
+    return customersList;
+  }
+
+  @override
+  Future<List<Customer>> searchCustomers(String keyword) async {
+    List<Map<String, Object?>>? mapList = await db.database?.query(
+      db.customerTable,
+      orderBy: "name ASC", //DESC
+      where: "name LIKE ?",
+      whereArgs: ["%$keyword%"],
+    );
+    Debugger.debug(
+      title: "CustomersRepository.searchCustomers",
       data: mapList,
     );
 

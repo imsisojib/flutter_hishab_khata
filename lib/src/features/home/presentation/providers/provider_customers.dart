@@ -48,6 +48,12 @@ class ProviderCustomers extends ChangeNotifier{
     notifyListeners();
   }
 
+  void searchCustomers(String keyword) async{
+    _allCustomers.clear();
+    _allCustomers = await customersRepository.searchCustomers(keyword);
+    notifyListeners();
+  }
+
   void saveCustomer() async{
     if(_customer.phoneNumber?.length!=11){
       Fluttertoast.showToast(msg: "Invalid Phone Number!");
