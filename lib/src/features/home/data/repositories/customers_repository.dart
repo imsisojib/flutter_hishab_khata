@@ -11,27 +11,46 @@ class CustomerRepository implements ICustomersRepository {
   @override
   Future<int?> addCustomer(Customer customer) async {
     int? result;
-    result = await db.database?.insert(
-      db.customerTable, customer.toJson(),
-    ).onError((error, stackTrace){
-      Debugger.debug(title: "CustomerRepository.addCustomer: onError", data: error,);
+    result = await db.database
+        ?.insert(
+      db.customerTable,
+      customer.toJson(),
+    )
+        .onError((error, stackTrace) {
+      Debugger.debug(
+        title: "CustomerRepository.addCustomer: onError",
+        data: error,
+      );
       return -1;
     });
-    Debugger.debug(title: "CustomerRepository.addCustomer", data: result,);
+    Debugger.debug(
+      title: "CustomerRepository.addCustomer",
+      data: result,
+    );
     return result;
   }
 
   @override
-  Future<int?> deleteCustomer(String phoneNumber) async{
-    int? result = await db.database?.delete(db.customerTable, where: 'phone_number = ?', whereArgs: [phoneNumber]);
-    Debugger.debug(title: "CustomerRepository.deleteCustomer", data: result,);
+  Future<int?> deleteCustomer(String phoneNumber) async {
+    int? result = await db.database
+        ?.delete(db.customerTable, where: 'phone_number = ?', whereArgs: [phoneNumber]);
+    Debugger.debug(
+      title: "CustomerRepository.deleteCustomer",
+      data: result,
+    );
     return result;
   }
 
   @override
-  Future<List<Customer>> fetchAllCustomers() async{
-    List<Map<String, Object?>>? mapList = await db.database?.query(db.customerTable);
-    Debugger.debug(title: "CustomersRepository.fetchAllCustomers", data: mapList,);
+  Future<List<Customer>> fetchAllCustomers() async {
+    List<Map<String, Object?>>? mapList = await db.database?.query(
+      db.customerTable,
+      orderBy: "name ASC"
+    );
+    Debugger.debug(
+      title: "CustomersRepository.fetchAllCustomers",
+      data: mapList,
+    );
 
     List<Customer> customersList = [];
     for (Map<String, Object?> item in mapList!) {
@@ -41,15 +60,18 @@ class CustomerRepository implements ICustomersRepository {
   }
 
   @override
-  Future<int?> updateCustomer(Customer customer) async{
+  Future<int?> updateCustomer(Customer customer) async {
     int? result = await db.database?.update(db.customerTable, customer.toJson(),
         where: 'phone_number = ?', whereArgs: [customer.phoneNumber]);
-    Debugger.debug(title: "CustomerRepository.updateCustomer", data: result,);
+    Debugger.debug(
+      title: "CustomerRepository.updateCustomer",
+      data: result,
+    );
     return result;
   }
 
   @override
-  Future<Customer?> findCustomerById(String phoneNumber) async{
+  Future<Customer?> findCustomerById(String phoneNumber) async {
     List<Map<String, Object?>>? result = await db.database?.query(
       db.customerTable,
       columns: ['phone_number', 'name', 'address', 'company_name'],
@@ -57,9 +79,12 @@ class CustomerRepository implements ICustomersRepository {
       whereArgs: [phoneNumber],
       limit: 1,
     );
-    Debugger.debug(title: "CustomerRepository.findCustomerById", data: result,);
+    Debugger.debug(
+      title: "CustomerRepository.findCustomerById",
+      data: result,
+    );
 
-    if(result==null || result.isEmpty) return null;
+    if (result == null || result.isEmpty) return null;
 
     Customer? customer = Customer.fromJson(result.first);
 
@@ -67,13 +92,13 @@ class CustomerRepository implements ICustomersRepository {
   }
 
   @override
-  Future<int?> countTotalCustomers() async{
-    var result = await db.database?.rawQuery(
-      "SELECT COUNT(*) FROM ${db.customerTable}"
+  Future<int?> countTotalCustomers() async {
+    var result = await db.database?.rawQuery("SELECT COUNT(*) FROM ${db.customerTable}");
+    Debugger.debug(
+      title: "CustomerRepository.countTotalCustomers",
+      data: result,
     );
-    Debugger.debug(title: "CustomerRepository.countTotalCustomers", data: result,);
 
     return result?.first['COUNT(*)'] as int?;
   }
-
 }
