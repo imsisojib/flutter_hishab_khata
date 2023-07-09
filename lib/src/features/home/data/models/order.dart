@@ -1,6 +1,6 @@
 import 'customer.dart';
 
-class Order {
+class OrderModel {
   int? id;
   double? total;
   double? paid;
@@ -11,7 +11,7 @@ class Order {
   Customer? customer; //local usages only
   String? name; //customer name, only for showing
 
-  Order(
+  OrderModel(
       {this.id,
       this.total = 0,
       this.paid = 0,
@@ -19,7 +19,7 @@ class Order {
       this.due = 0,
       this.phoneNumber});
 
-  Order.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     total = json['total'];
     paid = json['paid'];
@@ -39,6 +39,7 @@ class Order {
     data['due'] = due;
     data['phone_number'] = phoneNumber;
     data['created_at'] = createdAt;
+    data['name'] = name;
     return data;
   }
 }

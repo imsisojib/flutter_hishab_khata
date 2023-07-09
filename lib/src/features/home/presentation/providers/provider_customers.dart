@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
@@ -44,7 +45,7 @@ class ProviderCustomers extends ChangeNotifier{
   //methods
   void fetchAllCustomers() async{
     _allCustomers.clear();
-    _allCustomers = await customersRepository.fetchAllCustomers();
+    _allCustomers.addAll(await customersRepository.fetchAllCustomers());
     notifyListeners();
   }
 
@@ -94,6 +95,16 @@ class ProviderCustomers extends ChangeNotifier{
   void countTotalCustomers() async{
     totalCustomerCount = await customersRepository.countTotalCustomers()??0;
     notifyListeners();
+  }
+
+  Future<bool> backupCustomers() async{
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var customersReference = firebaseFirestore.collection("Customers");
+    var customersList = await customersRepository.fetchAllCustomers();
+    for(var customer in customersList){
+      await customersReference.doc("${customer.phoneNumber}").set(customer.toJson(),SetOptions(merge: true));
+    }
+    return true;
   }
 
 

@@ -89,7 +89,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                   child: FutureBuilder(
                     future: providerOrders.fetchTotalOrdersInfoByPhoneNumber(widget.phoneNumber),
                     builder: (_, AsyncSnapshot response){
-                      Order? order = response.data;
+                      OrderModel? order = response.data;
                       if(order==null){
                         return const SizedBox();
                       }

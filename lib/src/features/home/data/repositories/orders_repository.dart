@@ -9,7 +9,7 @@ class OrdersRepository implements IOrdersRepository {
   OrdersRepository({required this.db});
 
   @override
-  Future<int?> addOrder(Order order) async {
+  Future<int?> addOrder(OrderModel order) async {
     int? result = await db.database?.insert(db.ordersTable, order.toJson());
     Debugger.debug(
       title: "OrdersRepository.addOrder",
@@ -39,7 +39,7 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
-  Future<List<Order>> fetchAllOrders() async {
+  Future<List<OrderModel>> fetchAllOrders() async {
     //List<Map<String, Object?>>? mapList = await db.database?.query(db.ordersTable);
     List<Map<String, Object?>>? mapList = await db.database?.rawQuery("""SELECT
         ${db.ordersTable}.id as id,
@@ -57,15 +57,15 @@ class OrdersRepository implements IOrdersRepository {
       data: mapList,
     );
 
-    List<Order> ordersList = [];
+    List<OrderModel> ordersList = [];
     for (Map<String, Object?> item in mapList!) {
-      ordersList.add(Order.fromJson(item));
+      ordersList.add(OrderModel.fromJson(item));
     }
     return ordersList;
   }
 
   @override
-  Future<List<Order>> fetchAllOrdersByPhoneNumber(String phoneNumber) async {
+  Future<List<OrderModel>> fetchAllOrdersByPhoneNumber(String phoneNumber) async {
     Debugger.debug(
       title: "OrdersRepository.fetchAllOrdersByPhoneNumber: request",
       data: phoneNumber,
@@ -97,15 +97,15 @@ class OrdersRepository implements IOrdersRepository {
       data: mapList,
     );
 
-    List<Order> ordersList = [];
+    List<OrderModel> ordersList = [];
     for (Map<String, Object?> item in mapList!) {
-      ordersList.add(Order.fromJson(item));
+      ordersList.add(OrderModel.fromJson(item));
     }
     return ordersList;
   }
 
   @override
-  Future<Order?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
+  Future<OrderModel?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
     Debugger.debug(
       title: "OrdersRepository.totalOrdersInfoByPhoneNumber: request",
       data: phoneNumber,
@@ -131,11 +131,11 @@ class OrdersRepository implements IOrdersRepository {
       data: mapList,
     );
 
-    return Order.fromJson(mapList?.first??{});
+    return OrderModel.fromJson(mapList?.first??{});
   }
 
   @override
-  Future<int?> updateOrder(Order order) async {
+  Future<int?> updateOrder(OrderModel order) async {
     int? result = await db.database
         ?.update(db.ordersTable, order.toJson(), where: 'id = ?', whereArgs: [order.id]);
     Debugger.debug(

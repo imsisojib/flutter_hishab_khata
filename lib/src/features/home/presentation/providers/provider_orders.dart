@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
@@ -19,22 +20,22 @@ class ProviderOrders extends ChangeNotifier {
   }
 
   //states
-  Order _order = Order();
-  List<Order> _allOrders = [];
+  OrderModel _order = OrderModel();
+  List<OrderModel> _allOrders = [];
   bool _loading = false;
   int _totalOrdersCount = 0;
 
   //getters
-  Order get order => _order;
+  OrderModel get order => _order;
 
-  List<Order> get allOrders => _allOrders;
+  List<OrderModel> get allOrders => _allOrders;
 
   bool get loading => _loading;
 
   int get totalOrdersCount => _totalOrdersCount;
 
   //setters
-  set order(Order data) {
+  set order(OrderModel data) {
     _order = data;
     try {
       _order.due = _order.total! - _order.paid! - _order.discount!;
@@ -57,7 +58,7 @@ class ProviderOrders extends ChangeNotifier {
   //methods
   void fetchAllOrders() async {
     _allOrders.clear();
-    _allOrders = await ordersRepository.fetchAllOrders();
+    _allOrders.addAll(await ordersRepository.fetchAllOrders());
     notifyListeners();
   }
 
@@ -104,7 +105,7 @@ class ProviderOrders extends ChangeNotifier {
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
       sendSmsToCustomer(order);
 
-      _order = Order();
+      _order = OrderModel();
     }
 
     loading = false;
@@ -115,7 +116,7 @@ class ProviderOrders extends ChangeNotifier {
     notifyListeners();
   }
 
-  void sendSmsToCustomer(Order order) async {
+  void sendSmsToCustomer(OrderModel order) async {
     String message = "MI Enterprise"
         "\nDate: ${order.createdAt}"
         "\nOrder by: ${order.phoneNumber}"
@@ -155,7 +156,7 @@ class ProviderOrders extends ChangeNotifier {
 
   }
 
-  Future<Order?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async{
+  Future<OrderModel?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async{
     return await ordersRepository.totalOrdersInfoByPhoneNumber(phoneNumber??"");
   }
 
@@ -168,5 +169,17 @@ class ProviderOrders extends ChangeNotifier {
     await ordersRepository.deleteOrder(id);
     fetchAllOrdersByPhoneNumber(phoneNumber);
     countTotalOrders();
+  }
+
+  Future<bool> backupOrders() async{
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var ordersReference = firebaseFirestore.collection("Orders");
+    var ordersList = await ordersRepository.fetchAllOrders();
+    for(var order in ordersList){
+      await ordersReference.doc("${order.id}").set(order.toJson(), SetOptions(merge: true)).onError((error, stackTrace) {
+        print("----error: $error");
+      });
+    }
+    return true;
   }
 }
