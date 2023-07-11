@@ -98,7 +98,7 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              providerOrders.allOrders[index].name ?? "",
+                                              providerOrders.allOrders[index].customer?.name ?? "",
                                               style: theme.textTheme.titleSmall,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,

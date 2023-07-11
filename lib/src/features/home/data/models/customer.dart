@@ -17,11 +17,11 @@ class Customer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['phone_number'] = phoneNumber;
+    data['phoneNumber'] = phoneNumber;
     data['address'] = address;
-    data['company_name'] = companyName;
+    data['companyName'] = companyName;
     data['name'] = name;
-    data['created_at'] = createdAt;
+    data['createdAt'] = createdAt;
     return data;
   }
 }

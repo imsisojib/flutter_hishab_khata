@@ -71,7 +71,7 @@ class ProviderCustomers extends ChangeNotifier{
     //update date
     _customer.createdAt = DateFormat('yyyy-MM-dd').format(DateTime.now());
     int? result = await customersRepository.addCustomer(_customer);
-    if(result==null || result<=-1){
+    if(result!=200){
       //means not saved
       Fluttertoast.showToast(msg: "Failed to save this customer!");
 
@@ -100,10 +100,19 @@ class ProviderCustomers extends ChangeNotifier{
   Future<bool> backupCustomers() async{
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var customersReference = firebaseFirestore.collection("Customers");
-    var customersList = await customersRepository.fetchAllCustomers();
-    for(var customer in customersList){
+
+
+    /*for(var customer in customersList){
       await customersReference.doc("${customer.phoneNumber}").set(customer.toJson(),SetOptions(merge: true));
-    }
+    }*/
+
+    customersReference.get().then((querySnapshot){
+      for(DocumentSnapshot ds in querySnapshot.docs){
+        Customer customer = Customer.fromJson(ds.data() as Map<String, dynamic>);
+        sl<ICustomersRepository>().addCustomer(customer);
+      }
+    });
+
     return true;
   }
 

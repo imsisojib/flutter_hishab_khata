@@ -1,7 +1,8 @@
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
 
 abstract class IOrdersRepository{
-  Future<int?> addOrder(OrderModel order);
+  Future<int?> addOrder(RequestOrder order);
   Future<int?> deleteOrder(int orderId);
   Future<int?> updateOrder(OrderModel order);
   Future<List<OrderModel>> fetchAllOrders();

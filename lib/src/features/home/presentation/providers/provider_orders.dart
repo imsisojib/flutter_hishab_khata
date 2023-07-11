@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -90,7 +91,14 @@ class ProviderOrders extends ChangeNotifier {
 
     //update date
     _order.createdAt = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    int? result = await ordersRepository.addOrder(_order);
+    int? result = await ordersRepository.addOrder(RequestOrder(
+      phoneNumber: _order.phoneNumber,
+      total: _order.total,
+      paid: _order.paid,
+      due: _order.due,
+      discount: _order.discount,
+      createdAt: _order.createdAt,
+    ));
     if (result == null || result <= -1) {
       //means not saved
       Fluttertoast.showToast(msg: "Failed to save order!");
@@ -174,12 +182,31 @@ class ProviderOrders extends ChangeNotifier {
   Future<bool> backupOrders() async{
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var ordersReference = firebaseFirestore.collection("Orders");
-    var ordersList = await ordersRepository.fetchAllOrders();
-    for(var order in ordersList){
+    //var ordersList = await ordersRepository.fetchAllOrders();
+    /*for(var order in ordersList){
       await ordersReference.doc("${order.id}").set(order.toJson(), SetOptions(merge: true)).onError((error, stackTrace) {
         print("----error: $error");
       });
-    }
+    }*/
+
+    int count = 0;
+    ordersReference.get().then((querySnapshot){
+      print("--------size: ${querySnapshot.size}");
+      for(DocumentSnapshot ds in querySnapshot.docs){
+        count++;
+        OrderModel order = OrderModel.fromJson(ds.data() as Map<String, dynamic>);
+        print("--------count: $count");
+        sl<IOrdersRepository>().addOrder(RequestOrder(
+          phoneNumber: order.phoneNumber,
+          total: order.total,
+          paid: order.paid,
+          due: order.due,
+          discount: order.discount,
+          createdAt: order.createdAt,
+        ));
+      }
+    });
+
     return true;
   }
 }

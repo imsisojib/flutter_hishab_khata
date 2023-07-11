@@ -1,26 +1,48 @@
+import 'dart:convert';
+
+import 'package:flutter_hishab_khata/src/config/config_api.dart';
+import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
 import 'package:flutter_hishab_khata/src/core/data/database/hishab_database.dart';
+import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 
 class OrdersRepository implements IOrdersRepository {
-  final HishabDatabase db;
+  //final HishabDatabase db;
 
-  OrdersRepository({required this.db});
+  //final HishabDatabase db;
+  final IApiInterceptor apiInterceptor;
+  final TokenService tokenService;
+
+  OrdersRepository({required this.apiInterceptor, required this.tokenService});
 
   @override
-  Future<int?> addOrder(OrderModel order) async {
-    int? result = await db.database?.insert(db.ordersTable, order.toJson());
+  Future<int?> addOrder(RequestOrder request) async {
+    Debugger.debug(title: "OrdersRepository.addOrder(): request", data: request.toJson(),);
+
+    var response = await apiInterceptor.post(
+      endPoint: ConfigApi.createOrder,
+      body: jsonEncode(request.toJson()),
+      headers: tokenService.getUnAuthHeadersForJson(),
+    );
+
+    Debugger.debug(title: "OrdersRepository.addOrder(): response", data: response.body, statusCode: response.statusCode,);
+
+    return response.statusCode;
+
+    /*int? result = await db.database?.insert(db.ordersTable, order.toJson());
     Debugger.debug(
       title: "OrdersRepository.addOrder",
       data: result,
     );
-    return result;
+    return result;*/
   }
 
   @override
   Future<int?> deleteOrder(int orderId) async {
-    int? result = await db.database?.delete(
+    /*int? result = await db.database?.delete(
       db.ordersTable,
       where: 'id = ?',
       whereArgs: [orderId],
@@ -35,13 +57,15 @@ class OrdersRepository implements IOrdersRepository {
       title: "OrdersRepository.deleteOrder",
       data: result,
     );
-    return result;
+    return result;*/
+
+    return null;
   }
 
   @override
   Future<List<OrderModel>> fetchAllOrders() async {
     //List<Map<String, Object?>>? mapList = await db.database?.query(db.ordersTable);
-    List<Map<String, Object?>>? mapList = await db.database?.rawQuery("""SELECT
+    /*List<Map<String, Object?>>? mapList = await db.database?.rawQuery("""SELECT
         ${db.ordersTable}.id as id,
         ${db.ordersTable}.total as total,
         ${db.ordersTable}.paid as paid,
@@ -61,20 +85,22 @@ class OrdersRepository implements IOrdersRepository {
     for (Map<String, Object?> item in mapList!) {
       ordersList.add(OrderModel.fromJson(item));
     }
-    return ordersList;
+    return ordersList;*/
+
+    return [];
   }
 
   @override
   Future<List<OrderModel>> fetchAllOrdersByPhoneNumber(String phoneNumber) async {
-    Debugger.debug(
+    /*Debugger.debug(
       title: "OrdersRepository.fetchAllOrdersByPhoneNumber: request",
       data: phoneNumber,
     );
-    /*List<Map<String, Object?>>? mapList = await db.database?.query(
+    */ /*List<Map<String, Object?>>? mapList = await db.database?.query(
       db.ordersTable,
       where: 'phone_number = ?',
       whereArgs: [phoneNumber],
-    );*/
+    );*/ /*
     List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
         """SELECT
         ${db.ordersTable}.id as id,
@@ -101,20 +127,22 @@ class OrdersRepository implements IOrdersRepository {
     for (Map<String, Object?> item in mapList!) {
       ordersList.add(OrderModel.fromJson(item));
     }
-    return ordersList;
+    return ordersList;*/
+
+    return [];
   }
 
   @override
   Future<OrderModel?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
-    Debugger.debug(
+    /*Debugger.debug(
       title: "OrdersRepository.totalOrdersInfoByPhoneNumber: request",
       data: phoneNumber,
     );
-    /*List<Map<String, Object?>>? mapList = await db.database?.query(
+    */ /*List<Map<String, Object?>>? mapList = await db.database?.query(
       db.ordersTable,
       where: 'phone_number = ?',
       whereArgs: [phoneNumber],
-    );*/
+    );*/ /*
     List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
         """SELECT
         SUM(${db.ordersTable}.total) as total,
@@ -131,28 +159,34 @@ class OrdersRepository implements IOrdersRepository {
       data: mapList,
     );
 
-    return OrderModel.fromJson(mapList?.first??{});
+    return OrderModel.fromJson(mapList?.first??{});*/
+
+    return null;
   }
 
   @override
   Future<int?> updateOrder(OrderModel order) async {
-    int? result = await db.database
+    /*int? result = await db.database
         ?.update(db.ordersTable, order.toJson(), where: 'id = ?', whereArgs: [order.id]);
     Debugger.debug(
       title: "OrdersRepository.updateOrder",
       data: result,
     );
-    return result;
+    return result;*/
+
+    return null;
   }
 
   @override
   Future<int?> countTotalOrders() async {
-    var result = await db.database?.rawQuery("SELECT COUNT(*) FROM ${db.ordersTable}");
+    /*var result = await db.database?.rawQuery("SELECT COUNT(*) FROM ${db.ordersTable}");
     Debugger.debug(
       title: "OrdersRepository.countTotalCustomers",
       data: result,
     );
 
-    return result?.first['COUNT(*)'] as int?;
+    return result?.first['COUNT(*)'] as int?;*/
+
+    return 0;
   }
 }

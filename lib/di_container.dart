@@ -30,12 +30,11 @@ Future<void> init() async {
   await database.init();
   sl.registerSingleton(database);  //initializing database for run-time
 
-
   ///REPOSITORIES
   //#region Repositories
   sl.registerLazySingleton<ICacheRepository>(() => CacheRepositoryImpl(sharedPreference: sl()));
-  sl.registerLazySingleton<ICustomersRepository>(() => CustomerRepository(db: sl()));
-  sl.registerLazySingleton<IOrdersRepository>(() => OrdersRepository(db: sl()));
+  sl.registerLazySingleton<ICustomersRepository>(() => CustomerRepository(apiInterceptor: sl(), tokenService: sl(),));
+  sl.registerLazySingleton<IOrdersRepository>(() => OrdersRepository(apiInterceptor: sl(), tokenService: sl(),));
   //#endregion
 
   ///USE-CASES
