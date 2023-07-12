@@ -29,26 +29,6 @@ class CustomerRepository implements ICustomersRepository {
     );
 
     return response.statusCode;
-
-    /*
-    int? result;
-    result = await db.database
-        ?.insert(
-      db.customerTable,
-      customer.toJson(),
-    )
-        .onError((error, stackTrace) {
-      Debugger.debug(
-        title: "CustomerRepository.addCustomer: onError",
-        data: error,
-      );
-      return -1;
-    });
-    Debugger.debug(
-      title: "CustomerRepository.addCustomer",
-      data: result,
-    );
-    return result;*/
   }
 
   @override
