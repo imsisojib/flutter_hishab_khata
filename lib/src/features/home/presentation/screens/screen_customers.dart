@@ -77,7 +77,7 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                     child: AdvanceTextFormField(
                       onChanged: (String keyword) {
                         if (keyword.isEmpty) {
-                          providerCustomers.fetchAllCustomers();
+                          providerCustomers.showAllCustomers();
                         } else {
                           providerCustomers.searchCustomers(keyword);
                         }
@@ -91,7 +91,86 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                     height: 16.h,
                   ),
                 ),
-                providerCustomers.loading
+                providerCustomers.searching?SliverList(
+                  delegate: SliverChildBuilderDelegate((_, index) {
+                    return ListTile(
+                      onTap: () {
+                        if (widget.mode == EnumCustomersScreenMode.selection) {
+                          //selecting customer for creating order
+                          var data = Provider.of<ProviderOrders>(context, listen: false).order;
+                          data.customer = providerCustomers.searchedCustomers[index];
+                          Provider.of<ProviderOrders>(context, listen: false).order = data;
+                          Navigator.popAndPushNamed(
+                            context,
+                            Routes.orderCreateFromHistoryScreen(),
+                          );
+                        } else {
+                          WidgetHelper.showDialogWithDynamicContent(
+                            content: PopupCustomerActions(
+                              onViewOrders: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.getOrdersByCustomerScreenRoute(
+                                    providerCustomers.searchedCustomers[index].phoneNumber ?? "",
+                                    providerCustomers.searchedCustomers[index].name ?? "",
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      title: Text(
+                        providerCustomers.searchedCustomers[index].phoneNumber ?? "",
+                        style: theme.textTheme.headlineSmall,
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            providerCustomers.searchedCustomers[index].name ?? "",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                          ),
+                          Text(
+                            providerCustomers.searchedCustomers[index].companyName ?? "",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          Text(
+                            providerCustomers.searchedCustomers[index].address ?? "",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Column(
+                        children: [
+                          Text(
+                            "Created on",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.grey600,
+                            ),
+                          ),
+                          Text(
+                            providerCustomers.searchedCustomers[index].createdAt ?? "N/A",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.grey600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }, childCount: providerCustomers.searchedCustomers.length),
+                ):providerCustomers.loading
                     ? const SliverToBoxAdapter(
                         child: Center(
                           child: CircularProgressIndicator(),

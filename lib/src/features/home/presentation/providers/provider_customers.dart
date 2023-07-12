@@ -17,13 +17,17 @@ class ProviderCustomers extends ChangeNotifier{
   //states
   Customer _customer = Customer();
   List<Customer> _allCustomers = [];
+  List<Customer> _searchedCustomers = [];
   bool _loading = false;
+  bool _searching = false;
   int _totalCustomerCount = 0;
 
   //getters
   Customer get customer => _customer;
   List<Customer> get allCustomers => _allCustomers;
+  List<Customer> get searchedCustomers => _searchedCustomers;
   bool get loading => _loading;
+  bool get searching => _searching;
   int get totalCustomerCount => _totalCustomerCount;
 
   //setters
@@ -33,6 +37,11 @@ class ProviderCustomers extends ChangeNotifier{
   }
   set loading(bool flag){
     _loading = flag;
+    notifyListeners();
+  }
+
+  set searching(bool flag){
+    _searching = flag;
     notifyListeners();
   }
 
@@ -51,10 +60,16 @@ class ProviderCustomers extends ChangeNotifier{
   }
 
   void searchCustomers(String keyword) async{
-    _allCustomers.clear();
+    /*_allCustomers.clear();
     loading = true;
     _allCustomers = await customersRepository.searchCustomers(keyword);
     loading = false;
+    notifyListeners();*/
+
+    //local searching
+    searching = true;
+    _searchedCustomers.clear();
+    _searchedCustomers.addAll(_allCustomers.where((element) => (element.name?.toLowerCase().contains(keyword.toLowerCase())??false) || (element.phoneNumber?.toLowerCase().contains(keyword.toLowerCase())??false) || (element.companyName?.toLowerCase().contains(keyword.toLowerCase())??false)));
     notifyListeners();
   }
 
@@ -98,6 +113,11 @@ class ProviderCustomers extends ChangeNotifier{
   void countTotalCustomers() async{
     totalCustomerCount = await customersRepository.countTotalCustomers()??0;
     notifyListeners();
+  }
+
+  void showAllCustomers() {
+    _searchedCustomers.clear();
+    searching = false;
   }
 
 

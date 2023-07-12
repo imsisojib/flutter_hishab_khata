@@ -2,9 +2,11 @@
     package="com.your_org.your_project_id.flutter_oilerplate_code">
 
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
         android:label="Hishab Khata"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
