@@ -74,7 +74,9 @@ class ProviderOrders extends ChangeNotifier {
   //methods
   void fetchAllOrders() async {
     _allOrders.clear();
+    loading = true;
     _allOrders.addAll(await ordersRepository.fetchAllOrders());
+    loading = false;
     notifyListeners();
   }
 

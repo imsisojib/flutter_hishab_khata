@@ -44,13 +44,17 @@ class ProviderCustomers extends ChangeNotifier{
   //methods
   void fetchAllCustomers() async{
     _allCustomers.clear();
+    loading = true;
     _allCustomers.addAll(await customersRepository.fetchAllCustomers());
+    loading = false;
     notifyListeners();
   }
 
   void searchCustomers(String keyword) async{
     _allCustomers.clear();
+    loading = true;
     _allCustomers = await customersRepository.searchCustomers(keyword);
+    loading = false;
     notifyListeners();
   }
 

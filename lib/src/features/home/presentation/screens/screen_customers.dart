@@ -91,42 +91,48 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                     height: 16.h,
                   ),
                 ),
-                providerCustomers.allCustomers.isEmpty
-                    ? const SliverFillRemaining(
+                providerCustomers.loading
+                    ? const SliverToBoxAdapter(
                         child: Center(
-                          child: Text("No customers found!"),
+                          child: CircularProgressIndicator(),
                         ),
                       )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate((_, index) {
-                          return ListTile(
-                            onTap: () {
-                              if (widget.mode == EnumCustomersScreenMode.selection) {
-                                //selecting customer for creating order
-                                var data = Provider.of<ProviderOrders>(context, listen: false).order;
-                                data.customer = providerCustomers.allCustomers[index];
-                                Provider.of<ProviderOrders>(context, listen: false).order = data;
-                                Navigator.popAndPushNamed(
-                                  context,
-                                  Routes.orderCreateFromHistoryScreen(),
-                                );
-                              } else {
-                                WidgetHelper.showDialogWithDynamicContent(
-                                  content: PopupCustomerActions(
-                                    onViewOrders: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        Routes.getOrdersByCustomerScreenRoute(
-                                          providerCustomers.allCustomers[index].phoneNumber ?? "",
-                                          providerCustomers.allCustomers[index].name ?? "",
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              }
-                            },
-                            /*onLongPress: () {
+                    : providerCustomers.allCustomers.isEmpty
+                        ? const SliverFillRemaining(
+                            child: Center(
+                              child: Text("No customers found!"),
+                            ),
+                          )
+                        : SliverList(
+                            delegate: SliverChildBuilderDelegate((_, index) {
+                              return ListTile(
+                                onTap: () {
+                                  if (widget.mode == EnumCustomersScreenMode.selection) {
+                                    //selecting customer for creating order
+                                    var data = Provider.of<ProviderOrders>(context, listen: false).order;
+                                    data.customer = providerCustomers.allCustomers[index];
+                                    Provider.of<ProviderOrders>(context, listen: false).order = data;
+                                    Navigator.popAndPushNamed(
+                                      context,
+                                      Routes.orderCreateFromHistoryScreen(),
+                                    );
+                                  } else {
+                                    WidgetHelper.showDialogWithDynamicContent(
+                                      content: PopupCustomerActions(
+                                        onViewOrders: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.getOrdersByCustomerScreenRoute(
+                                              providerCustomers.allCustomers[index].phoneNumber ?? "",
+                                              providerCustomers.allCustomers[index].name ?? "",
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  }
+                                },
+                                /*onLongPress: () {
                         if (widget.mode != EnumCustomersScreenMode.selection) {
                           WidgetHelper.showDialogWithDynamicContent(
                             content: PopupCustomerActions(
@@ -147,57 +153,57 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                           );
                         }
                       },*/
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                            title: Text(
-                              providerCustomers.allCustomers[index].phoneNumber ?? "",
-                              style: theme.textTheme.headlineSmall,
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  providerCustomers.allCustomers[index].name ?? "",
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                title: Text(
+                                  providerCustomers.allCustomers[index].phoneNumber ?? "",
+                                  style: theme.textTheme.headlineSmall,
                                 ),
-                                SizedBox(
-                                  height: 4.h,
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      providerCustomers.allCustomers[index].name ?? "",
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4.h,
+                                    ),
+                                    Text(
+                                      providerCustomers.allCustomers[index].companyName ?? "",
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                    Text(
+                                      providerCustomers.allCustomers[index].address ?? "",
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  providerCustomers.allCustomers[index].companyName ?? "",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                                trailing: Column(
+                                  children: [
+                                    Text(
+                                      "Created on",
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: AppColors.grey600,
+                                      ),
+                                    ),
+                                    Text(
+                                      providerCustomers.allCustomers[index].createdAt ?? "N/A",
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: AppColors.grey600,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  providerCustomers.allCustomers[index].address ?? "",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: Column(
-                              children: [
-                                Text(
-                                  "Created on",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.grey600,
-                                  ),
-                                ),
-                                Text(
-                                  providerCustomers.allCustomers[index].createdAt ?? "N/A",
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.grey600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }, childCount: providerCustomers.allCustomers.length),
-                      ),
+                              );
+                            }, childCount: providerCustomers.allCustomers.length),
+                          ),
               ],
             );
           },
