@@ -45,25 +45,19 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
-  Future<int?> deleteOrder(int orderId) async {
-    /*int? result = await db.database?.delete(
-      db.ordersTable,
-      where: 'id = ?',
-      whereArgs: [orderId],
-    ).onError((error, stackTrace) {
-      Debugger.debug(
-        title: "OrdersRepository.deleteOrder: onError",
-        data: error,
-      );
-      return -1;
-    });
-    Debugger.debug(
-      title: "OrdersRepository.deleteOrder",
-      data: result,
+  Future<int?> deleteOrder(var orderId) async {
+    var response = await apiInterceptor.post(
+      endPoint: ConfigApi.deleteOrder(orderId),
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
-    return result;*/
 
-    return null;
+    Debugger.debug(
+      title: "OrdersRepository.deleteOrder(): response",
+      data: response.body,
+      statusCode: response.statusCode,
+    );
+
+    return response.statusCode;
   }
 
   @override

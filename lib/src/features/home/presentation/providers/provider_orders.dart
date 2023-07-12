@@ -157,9 +157,15 @@ class ProviderOrders extends ChangeNotifier {
   void deleteOrder(int? id) async{
     if(id==null) return;
 
-    await ordersRepository.deleteOrder(id);
-    fetchAllOrders();
-    countTotalOrders();
+    int? responseCode = await ordersRepository.deleteOrder(id);
+    if(responseCode==200){
+      Fluttertoast.showToast(msg: "Order is deleted.");
+      fetchAllOrders();
+      countTotalOrders();
+    }else{
+      Fluttertoast.showToast(msg: "Failed to delete order!");
+    }
+
 
   }
 

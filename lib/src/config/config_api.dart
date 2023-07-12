@@ -10,5 +10,8 @@ class ConfigApi{
   static const String createOrder = "/api/orders/create";
   static const String allOrders = "/api/orders/all";
   static const String countOrders = "/api/orders/count";
+  static String deleteOrder(var id){
+    return "/api/orders/delete?orderId=$id";
+  }
 
 }
