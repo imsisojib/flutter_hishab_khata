@@ -8,11 +8,11 @@ class Customer {
   Customer({this.phoneNumber, this.address, this.companyName, this.name});
 
   Customer.fromJson(Map<String, dynamic> json) {
-    phoneNumber = json['phone_number'];
+    phoneNumber = json['phoneNumber'];
     address = json['address'];
-    companyName = json['company_name'];
+    companyName = json['companyName'];
     name = json['name'];
-    createdAt = json['created_at'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {

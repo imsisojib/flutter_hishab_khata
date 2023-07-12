@@ -3,6 +3,7 @@ class ConfigApi{
 
   //customers
   static const String createCustomer = "/api/customers/create";
+  static const String allCustomers = "/api/customers/all";
   static const String countCustomers = "/api/customers/count";
 
   //customers

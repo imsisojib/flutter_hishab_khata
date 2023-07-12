@@ -64,19 +64,24 @@ class CustomerRepository implements ICustomersRepository {
 
   @override
   Future<List<Customer>> fetchAllCustomers() async {
-    /*List<Map<String, Object?>>? mapList =
-        await db.database?.query(db.customerTable, orderBy: "name ASC");
-    Debugger.debug(
-      title: "CustomersRepository.fetchAllCustomers",
-      data: mapList,
+
+    List<Customer> customers = [];
+
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.allCustomers,
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
 
-    List<Customer> customersList = [];
-    for (Map<String, Object?> item in mapList!) {
-      customersList.add(Customer.fromJson(item));
-    }
-    return customersList;*/
-    return [];
+    Debugger.debug(
+      title: "RepositoryCustomers.countTotalCustomers(): response",
+      data: response.body,
+      statusCode: response.statusCode,
+    );
+    var data = jsonDecode(response.body);
+    data['result'].forEach((map){
+      customers.add(Customer.fromJson(map));
+    });
+    return customers;
   }
 
   @override
