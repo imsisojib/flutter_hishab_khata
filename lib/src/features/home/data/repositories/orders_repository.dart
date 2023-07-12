@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_hishab_khata/src/config/config_api.dart';
 import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
-import 'package:flutter_hishab_khata/src/core/data/database/hishab_database.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
@@ -20,7 +19,6 @@ class OrdersRepository implements IOrdersRepository {
 
   @override
   Future<int?> addOrder(RequestOrder request) async {
-    Debugger.debug(title: "OrdersRepository.addOrder(): request", data: request.toJson(),);
 
     var response = await apiInterceptor.post(
       endPoint: ConfigApi.createOrder,
@@ -28,7 +26,13 @@ class OrdersRepository implements IOrdersRepository {
       headers: tokenService.getUnAuthHeadersForJson(),
     );
 
-    Debugger.debug(title: "OrdersRepository.addOrder(): response", data: response.body, statusCode: response.statusCode,);
+    if(response.statusCode!=200){
+      Debugger.debug(title: "OrdersRepository.addOrder(): request", data: request.toJson(),);
+      Debugger.debug(title: "OrdersRepository.addOrder(): response", data: response.body, statusCode: response.statusCode,);
+    }else{
+      print("------------uploaded: ${request.phoneNumber}");
+    }
+
 
     return response.statusCode;
 

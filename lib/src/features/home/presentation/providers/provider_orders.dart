@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
@@ -177,36 +176,5 @@ class ProviderOrders extends ChangeNotifier {
     await ordersRepository.deleteOrder(id);
     fetchAllOrdersByPhoneNumber(phoneNumber);
     countTotalOrders();
-  }
-
-  Future<bool> backupOrders() async{
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    var ordersReference = firebaseFirestore.collection("Orders");
-    //var ordersList = await ordersRepository.fetchAllOrders();
-    /*for(var order in ordersList){
-      await ordersReference.doc("${order.id}").set(order.toJson(), SetOptions(merge: true)).onError((error, stackTrace) {
-        print("----error: $error");
-      });
-    }*/
-
-    int count = 0;
-    ordersReference.get().then((querySnapshot){
-      print("--------size: ${querySnapshot.size}");
-      for(DocumentSnapshot ds in querySnapshot.docs){
-        count++;
-        OrderModel order = OrderModel.fromJson(ds.data() as Map<String, dynamic>);
-        print("--------count: $count");
-        sl<IOrdersRepository>().addOrder(RequestOrder(
-          phoneNumber: order.phoneNumber,
-          total: order.total,
-          paid: order.paid,
-          due: order.due,
-          discount: order.discount,
-          createdAt: order.createdAt,
-        ));
-      }
-    });
-
-    return true;
   }
 }

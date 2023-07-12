@@ -2,7 +2,6 @@ import 'package:flutter_hishab_khata/src/config/config_api.dart';
 import 'package:flutter_hishab_khata/src/core/application/api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
 import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
-import 'package:flutter_hishab_khata/src/core/data/database/hishab_database.dart';
 import 'package:flutter_hishab_khata/src/core/data/repositories/cache_repository_impl.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_cache_repository.dart';
@@ -24,11 +23,6 @@ Future<void> init() async {
   // External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-
-  ///database
-  HishabDatabase database = HishabDatabase();
-  await database.init();
-  sl.registerSingleton(database);  //initializing database for run-time
 
   ///REPOSITORIES
   //#region Repositories

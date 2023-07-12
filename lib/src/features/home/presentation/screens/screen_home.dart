@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
@@ -146,167 +145,13 @@ class _ScreenHomeState extends State<ScreenHome> {
                   SizedBox(
                     height: 16.h,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            backupOrdersAndCustomersDataToFirebase();
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            margin: EdgeInsets.zero,
-                            elevation: 12,
-                            shadowColor: AppColors.grey400.withOpacity(.3),
-                            child: SizedBox(
-                              height: 180.h,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "***",
-                                    style: theme.textTheme.headlineMedium,
-                                  ),
-                                  SizedBox(
-                                    height: 24.h,
-                                  ),
-                                  loading
-                                      ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : Text(
-                                          "Backup Now",
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(fontStyle: FontStyle.italic),
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 24.w,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            backupCustomersToAws();
-                          },
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            margin: EdgeInsets.zero,
-                            elevation: 12,
-                            shadowColor: AppColors.grey400.withOpacity(.3),
-                            child: SizedBox(
-                              height: 180.h,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "***",
-                                    style: theme.textTheme.headlineMedium,
-                                  ),
-                                  SizedBox(
-                                    height: 24.h,
-                                  ),
-                                  loading
-                                      ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : Text(
-                                          "Backup Customers",
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(fontStyle: FontStyle.italic),
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
-            SliverList(delegate: SliverChildBuilderDelegate(
-              (_, index) {
-                return ListTile(
-                  title: Text("Phone Number: ${requestList[index].phoneNumber}"),
-                  subtitle: Text("Order No: ${index + 1}"),
-                  onTap: () {
-                    sl<IOrdersRepository>().addOrder(requestList[index]);
-                    setState(() {
-                      requestList.removeAt(index);
-                    });
-                  },
-                );
-              },
-              childCount: requestList.length,
-            )),
           ],
         ),
       )),
     );
   }
 
-  void backupOrdersAndCustomersDataToFirebase() async {
-    setState(() {
-      loading = true;
-    });
-
-    await sl<ProviderOrders>().backupOrders();
-    await sl<ProviderCustomers>().backupCustomers();
-
-    setState(() {
-      loading = false;
-    });
-  }
-
-  void backupCustomersToAws() async {
-    setState(() {
-      loading = true;
-    });
-
-    //await sl<ProviderCustomers>().backupCustomers();
-    await sl<ProviderOrders>().backupOrders();
-
-   /* FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    var ordersReference = firebaseFirestore.collection("Orders");
-    //var ordersList = await ordersRepository.fetchAllOrders();
-    *//*for(var order in ordersList){
-      await ordersReference.doc("${order.id}").set(order.toJson(), SetOptions(merge: true)).onError((error, stackTrace) {
-        print("----error: $error");
-      });
-    }*//*
-
-    ordersReference.get().then((querySnapshot) {
-      print("--------size: ${querySnapshot.size}");
-      for (DocumentSnapshot ds in querySnapshot.docs) {
-        OrderModel order = OrderModel.fromJson(ds.data() as Map<String, dynamic>);
-        requestList.add(RequestOrder(
-          phoneNumber: order.phoneNumber,
-          total: order.total,
-          paid: order.paid,
-          due: order.due,
-          discount: order.discount,
-          createdAt: order.createdAt,
-        ));
-      }
-    });*/
-
-    setState(() {
-      loading = false;
-      requestList;
-    });
-  }
 }

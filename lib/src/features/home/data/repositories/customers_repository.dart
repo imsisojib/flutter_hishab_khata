@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_hishab_khata/src/config/config_api.dart';
 import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
-import 'package:flutter_hishab_khata/src/core/data/database/hishab_database.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/customer.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_customer_repository.dart';
