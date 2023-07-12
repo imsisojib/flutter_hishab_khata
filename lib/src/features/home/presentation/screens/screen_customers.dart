@@ -108,7 +108,7 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                                 Provider.of<ProviderOrders>(context, listen: false).order = data;
                                 Navigator.popAndPushNamed(
                                   context,
-                                  Routes.orderCreateScreen,
+                                  Routes.orderCreateFromHistoryScreen(),
                                 );
                               } else {
                                 WidgetHelper.showDialogWithDynamicContent(

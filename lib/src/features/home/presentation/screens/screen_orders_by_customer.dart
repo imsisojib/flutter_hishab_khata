@@ -48,7 +48,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
               Provider.of<ProviderOrders>(context, listen: false).order = data;
               Navigator.pushNamed(
                 context,
-                Routes.orderCreateScreen,
+                Routes.orderCreateFromHistoryScreen(),
               );
             },
             icon: Text(
@@ -70,7 +70,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
               );
             }
 
-            if (providerOrders.allOrders.isEmpty) {
+            if (providerOrders.ordersByPhoneNumber.isEmpty) {
               return const Center(
                 child: Text("No orders found!"),
               );
@@ -208,7 +208,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              providerOrders.allOrders[index].customer?.name ?? "",
+                                              providerOrders.ordersByPhoneNumber[index].customer?.name ?? "",
                                               style: theme.textTheme.titleSmall,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -223,7 +223,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                             style: theme.textTheme.bodySmall,
                                           ),
                                           Text(
-                                            providerOrders.allOrders[index].customer?.phoneNumber ?? "",
+                                            providerOrders.ordersByPhoneNumber[index].customer?.phoneNumber ?? "",
                                             style: theme.textTheme.titleSmall,
                                           ),
                                         ],
@@ -237,7 +237,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                                 fontStyle: FontStyle.italic),
                                           ),
                                           Text(
-                                            providerOrders.allOrders[index].createdAt ?? "",
+                                            providerOrders.ordersByPhoneNumber[index].createdAt ?? "",
                                             style: theme.textTheme.bodySmall?.copyWith(
                                                 color: AppColors.grey500,
                                                 fontStyle: FontStyle.italic),
@@ -268,7 +268,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                             onPositiveAction: (){
                                               //confirm delete
                                               providerOrders.deleteOrderAndFetchAllOrdersByPhoneNumber(
-                                                providerOrders.allOrders[index].id,
+                                                providerOrders.ordersByPhoneNumber[index].id,
                                                 widget.phoneNumber,
                                               );
                                             }
@@ -308,7 +308,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "${providerOrders.allOrders[index].total ?? 0}",
+                                  "${providerOrders.ordersByPhoneNumber[index].total ?? 0}",
                                   style: theme.textTheme.titleSmall,
                                 ),
                               ],
@@ -321,7 +321,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "${providerOrders.allOrders[index].paid ?? 0}",
+                                  "${providerOrders.ordersByPhoneNumber[index].paid ?? 0}",
                                   style: theme.textTheme.titleSmall,
                                 ),
                               ],
@@ -334,7 +334,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "${providerOrders.allOrders[index].discount ?? 0}",
+                                  "${providerOrders.ordersByPhoneNumber[index].discount ?? 0}",
                                   style: theme.textTheme.titleSmall,
                                 ),
                               ],
@@ -354,7 +354,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                   style: theme.textTheme.bodySmall,
                                 ),
                                 Text(
-                                  "${providerOrders.allOrders[index].due ?? 0}",
+                                  "${providerOrders.ordersByPhoneNumber[index].due ?? 0}",
                                   style: theme.textTheme.titleSmall,
                                 ),
                               ],
@@ -363,7 +363,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                         ),
                       ),
                     );
-                  }, childCount: providerOrders.allOrders.length),
+                  }, childCount: providerOrders.ordersByPhoneNumber.length),
                 ),
                 const SliverToBoxAdapter(
                   child: SizedBox(

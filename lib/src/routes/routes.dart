@@ -21,4 +21,8 @@ class Routes {
     return "$ordersByCustomerScreen?phone=$phoneNumber&name=$customerName";
   }
 
+  static orderCreateFromHistoryScreen(){
+    return "$orderCreateScreen?history=1";
+  }
+
 }

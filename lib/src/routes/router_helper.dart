@@ -47,8 +47,17 @@ class RouterHelper {
     return const ScreenOrders();
   });
   static final Handler _ordersCreateScreenHandler =
+  //history
       Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
-    return const ScreenOrderCreate();
+        String? fromHistoryScreen;
+        try{
+          fromHistoryScreen = parameters['history'][0];
+        }catch(e){
+          //
+        }
+    return ScreenOrderCreate(
+      fromHistoryScreen: fromHistoryScreen,
+    );
   });
   static final Handler _ordersUpdateScreenHandler =
       Handler(handlerFunc: (context, Map<String, dynamic> parameters) {

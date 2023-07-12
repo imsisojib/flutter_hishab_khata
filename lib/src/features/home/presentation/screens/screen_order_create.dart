@@ -12,7 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ScreenOrderCreate extends StatelessWidget {
-  const ScreenOrderCreate({super.key});
+  final String? fromHistoryScreen;
+  const ScreenOrderCreate({super.key, this.fromHistoryScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +150,7 @@ class ScreenOrderCreate extends StatelessWidget {
                             : ButtonFilled(
                                 buttonText: "Create Order",
                                 function: () {
-                                  providerOrders.saveOrder();
+                                  providerOrders.saveOrder(fromHistoryScreen: fromHistoryScreen);
                                 },
                               ),
                       ],

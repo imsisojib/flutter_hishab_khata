@@ -83,76 +83,39 @@ class OrdersRepository implements IOrdersRepository {
 
   @override
   Future<List<OrderModel>> fetchAllOrdersByPhoneNumber(String phoneNumber) async {
-    /*Debugger.debug(
-      title: "OrdersRepository.fetchAllOrdersByPhoneNumber: request",
-      data: phoneNumber,
+    List<OrderModel> orders = [];
+
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.findOrdersByPhoneNumber(phoneNumber),
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
-    */ /*List<Map<String, Object?>>? mapList = await db.database?.query(
-      db.ordersTable,
-      where: 'phone_number = ?',
-      whereArgs: [phoneNumber],
-    );*/ /*
-    List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
-        """SELECT
-        ${db.ordersTable}.id as id,
-        ${db.ordersTable}.total as total,
-        ${db.ordersTable}.paid as paid,
-        ${db.ordersTable}.discount as discount,
-        ${db.ordersTable}.due as due,
-        ${db.ordersTable}.created_at as created_at,
-        ${db.ordersTable}.phone_number as phone_number,
-        ${db.customerTable}.name as name
-        FROM ${db.ordersTable}
-        LEFT JOIN ${db.customerTable}
-        ON ${db.ordersTable}.phone_number = ${db.customerTable}.phone_number
-        WHERE ${db.ordersTable}.phone_number = ?
-        """,
-        [phoneNumber]
-    );
+
     Debugger.debug(
-      title: "OrdersRepository.fetchAllOrdersByPhoneNumber",
-      data: mapList,
+      title: "OrdersRepository.fetchAllOrders(): response",
+      data: response.body,
+      statusCode: response.statusCode,
     );
-
-    List<OrderModel> ordersList = [];
-    for (Map<String, Object?> item in mapList!) {
-      ordersList.add(OrderModel.fromJson(item));
-    }
-    return ordersList;*/
-
-    return [];
+    var data = jsonDecode(response.body);
+    data['result'].forEach((map){
+      orders.add(OrderModel.fromJson(map));
+    });
+    return orders;
   }
 
   @override
   Future<OrderModel?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
-    /*Debugger.debug(
-      title: "OrdersRepository.totalOrdersInfoByPhoneNumber: request",
-      data: phoneNumber,
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.calculateOrdersForPhoneNumber(phoneNumber),
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
-    */ /*List<Map<String, Object?>>? mapList = await db.database?.query(
-      db.ordersTable,
-      where: 'phone_number = ?',
-      whereArgs: [phoneNumber],
-    );*/ /*
-    List<Map<String, Object?>>? mapList = await db.database?.rawQuery(
-        """SELECT
-        SUM(${db.ordersTable}.total) as total,
-        SUM(${db.ordersTable}.paid) as paid,
-        SUM(${db.ordersTable}.discount) as discount,
-        SUM(${db.ordersTable}.due) as due
-        FROM ${db.ordersTable}
-        WHERE phone_number = ?
-        """,
-      [phoneNumber],
-    );
+
     Debugger.debug(
-      title: "OrdersRepository.totalOrdersInfoByPhoneNumber: result",
-      data: mapList,
+      title: "OrdersRepository.fetchAllOrders(): response",
+      data: response.body,
+      statusCode: response.statusCode,
     );
-
-    return OrderModel.fromJson(mapList?.first??{});*/
-
-    return null;
+    var data = jsonDecode(response.body);
+    return OrderModel.fromJson(data['result']);
   }
 
   @override

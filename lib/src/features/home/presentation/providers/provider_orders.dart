@@ -22,6 +22,7 @@ class ProviderOrders extends ChangeNotifier {
   //states
   OrderModel _order = OrderModel();
   List<OrderModel> _allOrders = [];
+  List<OrderModel> _ordersByPhoneNumber = [];
   bool _loading = false;
   int _totalOrdersCount = 0;
 
@@ -29,6 +30,8 @@ class ProviderOrders extends ChangeNotifier {
   OrderModel get order => _order;
 
   List<OrderModel> get allOrders => _allOrders;
+
+  List<OrderModel> get ordersByPhoneNumber => _ordersByPhoneNumber;
 
   bool get loading => _loading;
 
@@ -64,18 +67,18 @@ class ProviderOrders extends ChangeNotifier {
 
   void fetchAllOrdersByPhoneNumber(String? phoneNumber) async {
     loading = true;
-    _allOrders.clear();
+    _ordersByPhoneNumber.clear();
     if(phoneNumber==null){
       loading = false;
       return;
     }
 
-    _allOrders = await ordersRepository.fetchAllOrdersByPhoneNumber(phoneNumber);
+    _ordersByPhoneNumber = await ordersRepository.fetchAllOrdersByPhoneNumber(phoneNumber);
     loading = false;
     notifyListeners();
   }
 
-  void saveOrder() async {
+  void saveOrder({String? fromHistoryScreen}) async {
     if (_order.customer?.phoneNumber?.length != 11) {
       Fluttertoast.showToast(msg: "Invalid customer phone number!");
       return;
@@ -107,6 +110,9 @@ class ProviderOrders extends ChangeNotifier {
       //update customer list
       fetchAllOrders();
       countTotalOrders();
+      if(fromHistoryScreen=="1"){
+        fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
+      }
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
