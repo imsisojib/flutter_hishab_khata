@@ -103,11 +103,8 @@ class _ScreenCustomersState extends State<ScreenCustomers> {
                             onTap: () {
                               if (widget.mode == EnumCustomersScreenMode.selection) {
                                 //selecting customer for creating order
-                                var data =
-                                    Provider.of<ProviderOrders>(context, listen: false).order;
+                                var data = Provider.of<ProviderOrders>(context, listen: false).order;
                                 data.customer = providerCustomers.allCustomers[index];
-                                data.phoneNumber =
-                                    providerCustomers.allCustomers[index].phoneNumber;
                                 Provider.of<ProviderOrders>(context, listen: false).order = data;
                                 Navigator.popAndPushNamed(
                                   context,

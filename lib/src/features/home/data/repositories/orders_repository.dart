@@ -68,30 +68,23 @@ class OrdersRepository implements IOrdersRepository {
 
   @override
   Future<List<OrderModel>> fetchAllOrders() async {
-    //List<Map<String, Object?>>? mapList = await db.database?.query(db.ordersTable);
-    /*List<Map<String, Object?>>? mapList = await db.database?.rawQuery("""SELECT
-        ${db.ordersTable}.id as id,
-        ${db.ordersTable}.total as total,
-        ${db.ordersTable}.paid as paid,
-        ${db.ordersTable}.discount as discount,
-        ${db.ordersTable}.due as due,
-        ${db.ordersTable}.created_at as created_at,
-        ${db.ordersTable}.phone_number as phone_number,
-        (SELECT ${db.customerTable}.name FROM ${db.customerTable}
-        WHERE ${db.customerTable}.phone_number = ${db.ordersTable}.phone_number) as name
-        FROM ${db.ordersTable}""");
-    Debugger.debug(
-      title: "OrdersRepository.fetchAllOrders",
-      data: mapList,
+    List<OrderModel> orders = [];
+
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.allOrders,
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
 
-    List<OrderModel> ordersList = [];
-    for (Map<String, Object?> item in mapList!) {
-      ordersList.add(OrderModel.fromJson(item));
-    }
-    return ordersList;*/
-
-    return [];
+    Debugger.debug(
+      title: "OrdersRepository.fetchAllOrders(): response",
+      data: response.body,
+      statusCode: response.statusCode,
+    );
+    var data = jsonDecode(response.body);
+    data['result'].forEach((map){
+      orders.add(OrderModel.fromJson(map));
+    });
+    return orders;
   }
 
   @override

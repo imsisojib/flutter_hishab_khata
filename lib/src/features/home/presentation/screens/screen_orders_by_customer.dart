@@ -45,7 +45,6 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                 name: widget.name,
                 phoneNumber: widget.phoneNumber,
               );
-              data.phoneNumber = widget.phoneNumber;
               Provider.of<ProviderOrders>(context, listen: false).order = data;
               Navigator.pushNamed(
                 context,
@@ -224,7 +223,7 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                             style: theme.textTheme.bodySmall,
                                           ),
                                           Text(
-                                            providerOrders.allOrders[index].phoneNumber ?? "",
+                                            providerOrders.allOrders[index].customer?.phoneNumber ?? "",
                                             style: theme.textTheme.titleSmall,
                                           ),
                                         ],

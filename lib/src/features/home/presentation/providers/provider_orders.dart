@@ -76,7 +76,7 @@ class ProviderOrders extends ChangeNotifier {
   }
 
   void saveOrder() async {
-    if (_order.phoneNumber?.length != 11) {
+    if (_order.customer?.phoneNumber?.length != 11) {
       Fluttertoast.showToast(msg: "Invalid customer phone number!");
       return;
     }
@@ -91,7 +91,7 @@ class ProviderOrders extends ChangeNotifier {
     //update date
     _order.createdAt = DateFormat('yyyy-MM-dd').format(DateTime.now());
     int? result = await ordersRepository.addOrder(RequestOrder(
-      phoneNumber: _order.phoneNumber,
+      phoneNumber: _order.customer?.phoneNumber,
       total: _order.total,
       paid: _order.paid,
       due: _order.due,
@@ -126,14 +126,14 @@ class ProviderOrders extends ChangeNotifier {
   void sendSmsToCustomer(OrderModel order) async {
     String message = "MI Enterprise"
         "\nDate: ${order.createdAt}"
-        "\nOrder by: ${order.phoneNumber}"
+        "\nOrder by: ${order.customer?.phoneNumber}"
         "\nTotal Amount: ${order.total}"
         "\nPaid: ${order.paid ?? 0}"
         "\nDiscount: ${order.discount ?? 0}"
         "\nDue: ${order.due??0}";
 
     List<String> recipients = [
-      "+88${order.phoneNumber}",
+      "+88${order.customer?.phoneNumber}",
     ];
 
     String result = await sendSMS(

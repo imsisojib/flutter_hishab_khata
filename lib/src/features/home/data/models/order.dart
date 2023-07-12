@@ -9,9 +9,6 @@ class OrderModel {
   Customer? customer;
   String? createdAt;
 
-  //local usages
-  String? phoneNumber;
-
   OrderModel(
       {this.id,
         this.total,
@@ -30,7 +27,6 @@ class OrderModel {
     customer = json['customer'] != null
         ? Customer.fromJson(json['customer'])
         : null;
-    phoneNumber = json['phone_number'];
-    createdAt = json['created_at'];
+    createdAt = json['createdAt'];
   }
 }

@@ -113,7 +113,7 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                             style: theme.textTheme.bodySmall,
                                           ),
                                           Text(
-                                            providerOrders.allOrders[index].phoneNumber ?? "",
+                                            providerOrders.allOrders[index].customer?.phoneNumber ?? "",
                                             style: theme.textTheme.titleSmall,
                                           ),
                                         ],
