@@ -7,5 +7,6 @@ class ConfigApi{
 
   //customers
   static const String createOrder = "/api/orders/create";
+  static const String countOrders = "/api/orders/count";
 
 }

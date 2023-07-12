@@ -183,14 +183,17 @@ class OrdersRepository implements IOrdersRepository {
 
   @override
   Future<int?> countTotalOrders() async {
-    /*var result = await db.database?.rawQuery("SELECT COUNT(*) FROM ${db.ordersTable}");
-    Debugger.debug(
-      title: "OrdersRepository.countTotalCustomers",
-      data: result,
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.countOrders,
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
 
-    return result?.first['COUNT(*)'] as int?;*/
-
-    return 0;
+    Debugger.debug(
+      title: "OrdersRepository.countTotalOrders(): response",
+      data: response.body,
+      statusCode: response.statusCode,
+    );
+    var data = jsonDecode(response.body);
+    return data['result'];
   }
 }
