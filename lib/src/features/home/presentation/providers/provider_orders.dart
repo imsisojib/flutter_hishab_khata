@@ -3,6 +3,7 @@ import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_update_order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -21,6 +22,7 @@ class ProviderOrders extends ChangeNotifier {
 
   //states
   OrderModel _order = OrderModel();
+  OrderModel _requestUpdateOrder = OrderModel();
   List<OrderModel> _allOrders = [];
   List<OrderModel> _ordersByPhoneNumber = [];
   bool _loading = false;
@@ -28,6 +30,7 @@ class ProviderOrders extends ChangeNotifier {
 
   //getters
   OrderModel get order => _order;
+  OrderModel get requestUpdateOrder => _requestUpdateOrder;
 
   List<OrderModel> get allOrders => _allOrders;
 
@@ -44,6 +47,16 @@ class ProviderOrders extends ChangeNotifier {
       _order.due = _order.total! - _order.paid! - _order.discount!;
     } catch (e) {
       Debugger.debug(title: "ProviderOrders.dueCalculation: error", data: e);
+    }
+    notifyListeners();
+  }
+
+  set requestUpdateOrder(OrderModel data) {
+    _requestUpdateOrder = data;
+    try {
+      _requestUpdateOrder.due = _requestUpdateOrder.total! - _requestUpdateOrder.paid! - _requestUpdateOrder.discount!;
+    } catch (e) {
+      Debugger.debug(title: "ProviderOrders.dueCalculation->updateOrder: error", data: e);
     }
     notifyListeners();
   }
@@ -119,6 +132,47 @@ class ProviderOrders extends ChangeNotifier {
       sendSmsToCustomer(order);
 
       _order = OrderModel();
+    }
+
+    loading = false;
+  }
+
+  void updateOrder({String? fromHistoryScreen}) async {
+    if (_requestUpdateOrder.customer?.phoneNumber?.length != 11) {
+      Fluttertoast.showToast(msg: "Invalid customer phone number!");
+      return;
+    }
+
+    if (_requestUpdateOrder.total == null || _requestUpdateOrder.total! <= 0) {
+      Fluttertoast.showToast(msg: "Check input data again!");
+      return;
+    }
+
+    loading = true;
+
+    int? result = await ordersRepository.updateOrder(RequestUpdateOrder(
+      id: _requestUpdateOrder.id,
+      total: _requestUpdateOrder.total,
+      paid: _requestUpdateOrder.paid,
+      due: _requestUpdateOrder.due,
+      discount: _requestUpdateOrder.discount,
+    ));
+    if (result!=200) {
+      //means not saved
+      Fluttertoast.showToast(msg: "Failed to save order!");
+    } else {
+      //means success
+      Fluttertoast.showToast(msg: "Success! Order is updated!");
+      //update customer list
+      fetchAllOrders();
+      if(fromHistoryScreen=="1"){
+        fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
+      }
+
+      //pop back to previous page
+      Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
+
+      _requestUpdateOrder = OrderModel();
     }
 
     loading = false;

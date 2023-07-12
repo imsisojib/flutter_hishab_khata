@@ -8,7 +8,7 @@ class ConfigApi{
 
   //customers
   static const String createOrder = "/api/orders/create";
-  static const String updateOrder = "/api/orders/create";
+  static const String updateOrder = "/api/orders/update";
   static const String allOrders = "/api/orders/all";
   static const String countOrders = "/api/orders/count";
   static String deleteOrder(var id){

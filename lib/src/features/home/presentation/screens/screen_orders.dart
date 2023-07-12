@@ -147,7 +147,8 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                     switch (action) {
                                       case EnumOrderAction.update:
                                         {
-
+                                          providerOrders.requestUpdateOrder = providerOrders.allOrders[index];
+                                          Navigator.pushNamed(context, Routes.orderUpdateScreen);
                                           return;
                                         }
                                       case EnumOrderAction.delete:
@@ -168,13 +169,13 @@ class _ScreenOrdersState extends State<ScreenOrders> {
                                     }
                                   },
                                   itemBuilder: (_) => <PopupMenuEntry<EnumOrderAction>>[
-                                    /*const PopupMenuItem<EnumOrderAction>(
+                                    const PopupMenuItem<EnumOrderAction>(
                                       value: EnumOrderAction.update,
                                       child: CommonPopupMenuWidget(
                                         iconData: Icons.edit,
                                         name: "Update Order",
                                       ),
-                                    ),*/
+                                    ),
                                     const PopupMenuItem<EnumOrderAction>(
                                       value: EnumOrderAction.delete,
                                       child: CommonPopupMenuWidget(

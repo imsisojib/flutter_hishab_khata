@@ -15,87 +15,81 @@ class RouterHelper {
   static final FluroRouter router = FluroRouter();
 
   ///Handlers
-  static final Handler _homeScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+  static final Handler _homeScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
     return const ScreenHome();
   });
 
-  static final Handler _customersScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
-        String? mode;
-        try{
-          mode = parameters['mode'][0];
-        }catch(e){}
+  static final Handler _customersScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+    String? mode;
+    try {
+      mode = parameters['mode'][0];
+    } catch (e) {}
     return ScreenCustomers(
-      mode: mode == "selection"
-          ? EnumCustomersScreenMode.selection
-          : EnumCustomersScreenMode.view,
+      mode: mode == "selection" ? EnumCustomersScreenMode.selection : EnumCustomersScreenMode.view,
     );
   });
-  static final Handler _customersCreateScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+  static final Handler _customersCreateScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
     return const ScreenCustomerCreate();
   });
-  static final Handler _customersUpdateScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+  static final Handler _customersUpdateScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
     return const ScreenCustomerUpdate();
   });
 
   ///ORDERS
-  static final Handler _ordersScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+  static final Handler _ordersScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
     return const ScreenOrders();
   });
-  static final Handler _ordersCreateScreenHandler =
-  //history
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
-        String? fromHistoryScreen;
-        try{
-          fromHistoryScreen = parameters['history'][0];
-        }catch(e){
-          //
-        }
+  static final Handler _ordersCreateScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+    String? fromHistoryScreen;
+    try {
+      fromHistoryScreen = parameters['history'][0];
+    } catch (e) {
+      //
+    }
     return ScreenOrderCreate(
       fromHistoryScreen: fromHistoryScreen,
     );
   });
-  static final Handler _ordersUpdateScreenHandler =
-      Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
-    return const ScreenOrderUpdate();
+
+  static final Handler _ordersUpdateScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+    String? fromHistoryScreen;
+    try {
+      fromHistoryScreen = parameters['history'][0];
+    } catch (e) {
+      //
+    }
+    return ScreenOrderUpdate(
+      fromHistoryScreen: fromHistoryScreen,
+    );
   });
+
   static final Handler _ordersByCustomerScreenHandler =
       Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
-        String? phone;
-        String? name;
-        try{
-          phone = parameters['phone'][0];
-        }catch(e){}
-        try{
-          name = parameters['name'][0];
-        }catch(e){}
+    String? phone;
+    String? name;
+    try {
+      phone = parameters['phone'][0];
+    } catch (e) {}
+    try {
+      name = parameters['name'][0];
+    } catch (e) {}
     return ScreenOrdersByCustomer(
       phoneNumber: phone,
       name: name,
     );
   });
 
-  static final Handler _notFoundHandler =
-      Handler(handlerFunc: (context, parameters) => const ScreenError());
+  static final Handler _notFoundHandler = Handler(handlerFunc: (context, parameters) => const ScreenError());
 
   void setupRouter() {
     router.notFoundHandler = _notFoundHandler;
 
     //main-nav flow
-    router.define(Routes.homeScreen,
-        handler: _homeScreenHandler, transitionType: TransitionType.fadeIn);
-    router.define(Routes.ordersScreen,
-        handler: _ordersScreenHandler, transitionType: TransitionType.fadeIn);
-    router.define(Routes.orderCreateScreen,
-        handler: _ordersCreateScreenHandler, transitionType: TransitionType.fadeIn);
-    router.define(Routes.orderUpdateScreen,
-        handler: _ordersUpdateScreenHandler, transitionType: TransitionType.fadeIn);
-    router.define(Routes.customersScreen,
-        handler: _customersScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.homeScreen, handler: _homeScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.ordersScreen, handler: _ordersScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.orderCreateScreen, handler: _ordersCreateScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.orderUpdateScreen, handler: _ordersUpdateScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.customersScreen, handler: _customersScreenHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.customerCreateScreen,
         handler: _customersCreateScreenHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.customerUpdateScreen,

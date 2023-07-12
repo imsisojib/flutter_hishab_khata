@@ -257,7 +257,8 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                     switch (action) {
                                       case EnumOrderAction.update:
                                         {
-
+                                          providerOrders.requestUpdateOrder = providerOrders.ordersByPhoneNumber[index];
+                                          Navigator.pushNamed(context, Routes.orderUpdateFromHistoryScreen());
                                           return;
                                         }
                                       case EnumOrderAction.delete:
@@ -279,13 +280,13 @@ class _ScreenOrdersByCustomerState extends State<ScreenOrdersByCustomer> {
                                     }
                                   },
                                   itemBuilder: (_) => <PopupMenuEntry<EnumOrderAction>>[
-                                    /*const PopupMenuItem<EnumOrderAction>(
+                                    const PopupMenuItem<EnumOrderAction>(
                                       value: EnumOrderAction.update,
                                       child: CommonPopupMenuWidget(
                                         iconData: Icons.edit,
                                         name: "Update Order",
                                       ),
-                                    ),*/
+                                    ),
                                     const PopupMenuItem<EnumOrderAction>(
                                       value: EnumOrderAction.delete,
                                       child: CommonPopupMenuWidget(

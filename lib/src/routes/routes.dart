@@ -24,5 +24,8 @@ class Routes {
   static orderCreateFromHistoryScreen(){
     return "$orderCreateScreen?history=1";
   }
+  static orderUpdateFromHistoryScreen(){
+    return "$orderUpdateScreen?history=1";
+  }
 
 }

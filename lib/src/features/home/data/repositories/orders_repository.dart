@@ -5,6 +5,7 @@ import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_update_order.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 
@@ -26,22 +27,7 @@ class OrdersRepository implements IOrdersRepository {
       headers: tokenService.getUnAuthHeadersForJson(),
     );
 
-    if(response.statusCode!=200){
-      Debugger.debug(title: "OrdersRepository.addOrder(): request", data: request.toJson(),);
-      Debugger.debug(title: "OrdersRepository.addOrder(): response", data: response.body, statusCode: response.statusCode,);
-    }else{
-      print("------------uploaded: ${request.phoneNumber}");
-    }
-
-
     return response.statusCode;
-
-    /*int? result = await db.database?.insert(db.ordersTable, order.toJson());
-    Debugger.debug(
-      title: "OrdersRepository.addOrder",
-      data: result,
-    );
-    return result;*/
   }
 
   @override
@@ -119,16 +105,14 @@ class OrdersRepository implements IOrdersRepository {
   }
 
   @override
-  Future<int?> updateOrder(OrderModel order) async {
-    /*int? result = await db.database
-        ?.update(db.ordersTable, order.toJson(), where: 'id = ?', whereArgs: [order.id]);
-    Debugger.debug(
-      title: "OrdersRepository.updateOrder",
-      data: result,
+  Future<int?> updateOrder(RequestUpdateOrder order) async {
+    var response = await apiInterceptor.post(
+      endPoint: ConfigApi.updateOrder,
+      body: jsonEncode(order.toJson()),
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
-    return result;*/
 
-    return null;
+    return response.statusCode;
   }
 
   @override
