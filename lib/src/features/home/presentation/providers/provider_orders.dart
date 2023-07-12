@@ -165,9 +165,10 @@ class ProviderOrders extends ChangeNotifier {
       Fluttertoast.showToast(msg: "Success! Order is updated!");
       //update customer list
       fetchAllOrders();
-      if(fromHistoryScreen=="1"){
+      fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
+      /*if(fromHistoryScreen=="1"){
         fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
-      }
+      }*/
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);

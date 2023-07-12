@@ -5,8 +5,11 @@ class ConfigApi{
   static const String createCustomer = "/api/customers/create";
   static const String allCustomers = "/api/customers/all";
   static const String countCustomers = "/api/customers/count";
+  static String searchCustomersByName(String keyword){
+    return "/api/customers/search?keyword=$keyword";
+  }
 
-  //customers
+  //orders
   static const String createOrder = "/api/orders/create";
   static const String updateOrder = "/api/orders/update";
   static const String allOrders = "/api/orders/all";

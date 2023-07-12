@@ -66,24 +66,23 @@ class CustomerRepository implements ICustomersRepository {
 
   @override
   Future<List<Customer>> searchCustomers(String keyword) async {
-    /*List<Map<String, Object?>>? mapList = await db.database?.query(
-      db.customerTable,
-      orderBy: "name ASC", //DESC
-      where: "name LIKE ?",
-      whereArgs: ["%$keyword%"],
+    List<Customer> customers = [];
+
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.searchCustomersByName(keyword),
+      headers: tokenService.getUnAuthHeadersForJson(),
     );
+
     Debugger.debug(
-      title: "CustomersRepository.searchCustomers",
-      data: mapList,
+      title: "RepositoryCustomers.searchCustomers(): response",
+      data: response.body,
+      statusCode: response.statusCode,
     );
-
-    List<Customer> customersList = [];
-    for (Map<String, Object?> item in mapList!) {
-      customersList.add(Customer.fromJson(item));
-    }
-    return customersList;*/
-
-    return [];
+    var data = jsonDecode(response.body);
+    data['result'].forEach((map){
+      customers.add(Customer.fromJson(map));
+    });
+    return customers;
   }
 
   @override
