@@ -157,6 +157,57 @@ class _ScreenHomeState extends State<ScreenHome> {
                   SizedBox(
                     height: 16.h,
                   ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.ordersReportScreen,
+                            );
+                          },
+                          child: Consumer<ProviderOrders>(
+                            builder: (_, providerOrders, child) {
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                margin: EdgeInsets.zero,
+                                elevation: 12,
+                                shadowColor: AppColors.grey400.withOpacity(.3),
+                                child: SizedBox(
+                                  height: 180.h,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Orders\nReport",
+                                        style: theme.textTheme.titleMedium,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 24.w,
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {},
+                          child: const SizedBox(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16.h,
+                  ),
                 ],
               ),
             ),

@@ -15,6 +15,7 @@ class Routes {
   static const String orderCreateScreen = "/orders/create";
   static const String orderUpdateScreen = "/orders/update";
   static const String ordersByCustomerScreen = "/orders-by-customer";
+  static const String ordersReportScreen = "/orders-report";
 
   static String getCustomersScreenRoute(EnumCustomersScreenMode mode){
     return "$customersScreen?mode=${mode.name}";

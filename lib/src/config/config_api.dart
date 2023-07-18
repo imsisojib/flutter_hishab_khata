@@ -27,4 +27,8 @@ class ConfigApi{
     return "/api/orders/calculateTotal?phoneNumber=$phoneNumber";
   }
 
+  static String calculateOrdersReport({required String fromDate, required String toDate}){
+    return "/api/orders/ordersReport?fromDate=$fromDate&toDate=$toDate";
+  }
+
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hishab_khata/di_container.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
+import 'package:flutter_hishab_khata/src/core/data/models/api_response.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_orders_report.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_update_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/responses/response_orders_report.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -24,10 +27,18 @@ class ProviderOrders extends ChangeNotifier {
   List<OrderModel> _ordersByPhoneNumber = [];
   bool _loading = false;
   int _totalOrdersCount = 0;
+  ResponseOrdersReport? _responseOrdersReport;
+
+  RequestOrdersReport? _requestOrdersReport;
 
   //getters
   OrderModel get order => _order;
+
   OrderModel get requestUpdateOrder => _requestUpdateOrder;
+
+  RequestOrdersReport? get requestOrdersReport => _requestOrdersReport;
+
+  ResponseOrdersReport? get responseOrdersReport => _responseOrdersReport;
 
   List<OrderModel> get allOrders => _allOrders;
 
@@ -68,9 +79,14 @@ class ProviderOrders extends ChangeNotifier {
     notifyListeners();
   }
 
+  set requestOrdersReport(RequestOrdersReport? request) {
+    _requestOrdersReport = request;
+    notifyListeners();
+  }
+
   //methods
   void fetchAllOrders({bool forceFetch = false}) async {
-    if(_allOrders.isNotEmpty && !forceFetch) return;
+    if (_allOrders.isNotEmpty && !forceFetch) return;
     _allOrders.clear();
     loading = true;
     _allOrders.addAll(await ordersRepository.fetchAllOrders());
@@ -81,7 +97,7 @@ class ProviderOrders extends ChangeNotifier {
   void fetchAllOrdersByPhoneNumber(String? phoneNumber) async {
     loading = true;
     _ordersByPhoneNumber.clear();
-    if(phoneNumber==null){
+    if (phoneNumber == null) {
       loading = false;
       return;
     }
@@ -111,7 +127,7 @@ class ProviderOrders extends ChangeNotifier {
       total: _order.total,
       paid: _order.paid,
       due: _order.due,
-      discount: _order.discount??0,
+      discount: _order.discount ?? 0,
       createdAt: _order.createdAt,
     ));
     if (result == null || result <= -1) {
@@ -123,7 +139,7 @@ class ProviderOrders extends ChangeNotifier {
       //update customer list
       fetchAllOrders(forceFetch: true,);
       countTotalOrders();
-      if(fromHistoryScreen=="1"){
+      if (fromHistoryScreen == "1") {
         fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
       }
 
@@ -157,7 +173,7 @@ class ProviderOrders extends ChangeNotifier {
       due: _requestUpdateOrder.due,
       discount: _requestUpdateOrder.discount,
     ));
-    if (result!=200) {
+    if (result != 200) {
       //means not saved
       Fluttertoast.showToast(msg: "Failed to save order!");
     } else {
@@ -191,7 +207,7 @@ class ProviderOrders extends ChangeNotifier {
         "\nTotal Amount: ${order.total}"
         "\nPaid: ${order.paid ?? 0}"
         "\nDiscount: ${order.discount ?? 0}"
-        "\nDue: ${order.due??0}";
+        "\nDue: ${order.due ?? 0}";
 
     List<String> recipients = [
       "+88${order.customer?.phoneNumber}",
@@ -201,7 +217,7 @@ class ProviderOrders extends ChangeNotifier {
       message: message,
       recipients: recipients,
     ).catchError(
-      (error) async{
+          (error) async {
         Debugger.debug(
           title: "SendingSMS: result",
           data: error,
@@ -215,27 +231,25 @@ class ProviderOrders extends ChangeNotifier {
     );
   }
 
-  void deleteOrder(int? id) async{
-    if(id==null) return;
+  void deleteOrder(int? id) async {
+    if (id == null) return;
 
     int? responseCode = await ordersRepository.deleteOrder(id);
-    if(responseCode==200){
+    if (responseCode == 200) {
       Fluttertoast.showToast(msg: "Order is deleted.");
       fetchAllOrders(forceFetch: true,);
       countTotalOrders();
-    }else{
+    } else {
       Fluttertoast.showToast(msg: "Failed to delete order!");
     }
-
-
   }
 
-  Future<OrderModel?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async{
-    return await ordersRepository.totalOrdersInfoByPhoneNumber(phoneNumber??"");
+  Future<OrderModel?> fetchTotalOrdersInfoByPhoneNumber(String? phoneNumber) async {
+    return await ordersRepository.totalOrdersInfoByPhoneNumber(phoneNumber ?? "");
   }
 
-  void deleteOrderAndFetchAllOrdersByPhoneNumber(int? id, String? phoneNumber) async{
-    if(phoneNumber==null || id==null){
+  void deleteOrderAndFetchAllOrdersByPhoneNumber(int? id, String? phoneNumber) async {
+    if (phoneNumber == null || id == null) {
       Fluttertoast.showToast(msg: "Try again later!");
       return;
     }
@@ -243,5 +257,27 @@ class ProviderOrders extends ChangeNotifier {
     await ordersRepository.deleteOrder(id);
     fetchAllOrdersByPhoneNumber(phoneNumber);
     countTotalOrders();
+  }
+
+  void viewOrdersReport() async {
+    loading = true;
+    ApiResponse apiResponse = await ordersRepository.calculateOrdersReport(
+      fromDate: _requestOrdersReport?.fromDate == null ? "" : "${_requestOrdersReport?.fromDate} 00:00:00",
+      toDate: _requestOrdersReport?.toDate == null ? "" : "${_requestOrdersReport?.toDate} 23:59:59",
+    );
+
+    if(apiResponse.statusCode==200){
+      _responseOrdersReport = apiResponse.result;
+    }else{
+      _responseOrdersReport = null;
+    }
+
+    loading = false;
+  }
+
+  void clearOrdersReport() {
+    _requestOrdersReport = null;
+    _responseOrdersReport = null;
+    notifyListeners();
   }
 }

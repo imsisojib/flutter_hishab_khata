@@ -10,6 +10,7 @@ import 'package:flutter_hishab_khata/src/features/home/presentation/screens/scre
 import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_order_update.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_orders.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_orders_by_customer.dart';
+import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_orders_report.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
 
 class RouterHelper {
@@ -85,6 +86,11 @@ class RouterHelper {
     );
   });
 
+  static final Handler _ordersReportScreenHandler =
+  Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+    return const ScreenOrdersReport();
+  });
+
   static final Handler _notFoundHandler = Handler(handlerFunc: (context, parameters) => const ScreenError());
 
   void setupRouter() {
@@ -106,5 +112,7 @@ class RouterHelper {
         handler: _customersUpdateScreenHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.ordersByCustomerScreen,
         handler: _ordersByCustomerScreenHandler, transitionType: TransitionType.fadeIn);
+    router.define(Routes.ordersReportScreen,
+        handler: _ordersReportScreenHandler, transitionType: TransitionType.fadeIn);
   }
 }

@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter_hishab_khata/src/config/config_api.dart';
 import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
+import 'package:flutter_hishab_khata/src/core/data/models/api_response.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/models/order.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/requests/request_orders_report.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/requests/request_update_order.dart';
+import 'package:flutter_hishab_khata/src/features/home/data/responses/response_orders_report.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_orders_repository.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 
@@ -129,5 +132,25 @@ class OrdersRepository implements IOrdersRepository {
     );
     var data = jsonDecode(response.body);
     return data['result'];
+  }
+
+  @override
+  Future<ApiResponse> calculateOrdersReport({required String fromDate, required String toDate}) async {
+    var response = await apiInterceptor.get(
+      endPoint: ConfigApi.calculateOrdersReport(fromDate: fromDate, toDate: toDate,),
+      headers: tokenService.getHeadersForJson(),
+    );
+
+    Debugger.debug(
+      title: "OrdersRepository.calculateOrdersReport(): response",
+      data: response.body,
+      statusCode: response.statusCode,
+    );
+    try{
+      var data = jsonDecode(response.body);
+      return ApiResponse(statusCode: response.statusCode, result: ResponseOrdersReport.fromJson(data['result']));
+    }catch(e){
+      return ApiResponse(statusCode: 503, result: null,);
+    }
   }
 }
