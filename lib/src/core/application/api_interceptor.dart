@@ -1,7 +1,11 @@
+import 'package:flutter_hishab_khata/di_container.dart';
+import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
+import 'package:flutter_hishab_khata/src/features/account/presentation/providers/account_provider.dart';
 import 'package:flutter_hishab_khata/src/helpers/connectivity_helper.dart';
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ApiInterceptor implements IApiInterceptor {
   final String baseUrl;
@@ -14,11 +18,11 @@ class ApiInterceptor implements IApiInterceptor {
       Map<String, String>? headers,
       Map<String, dynamic>? body}) async {
     if (!await ConnectivityHelper.hasInternetConnection()) {
-      return http.Response('No Internet Connection!', 503);
+      return http.Response('No Internet Connection!', 504);
     }
     try {
       Uri url = Uri.parse(baseUrl + endPoint);
-      return await http.get(
+      var response =  await http.get(
         url,
         headers: headers,
       )
@@ -28,6 +32,13 @@ class ApiInterceptor implements IApiInterceptor {
           return http.Response('Server response timeout.', 408);
         },
       );
+
+      if(response.statusCode==401){
+        makeLogout();
+      }
+
+      return response;
+
     } catch (e) {
       Debugger.error(title: 'ApiInterceptor.get()', data: e);
       return http.Response('$e', 404);
@@ -40,11 +51,11 @@ class ApiInterceptor implements IApiInterceptor {
       Map<String, String>? headers,
       dynamic body}) async {
     if (!await ConnectivityHelper.hasInternetConnection()) {
-      return http.Response('No Internet Connection!', 503);
+      return http.Response('No Internet Connection!', 504);
     }
     try {
       Uri url = Uri.parse(baseUrl + endPoint);
-      return await http.post(
+      var response = await http.post(
         url,
         body: body,
         headers: headers,
@@ -55,6 +66,13 @@ class ApiInterceptor implements IApiInterceptor {
           return http.Response('Server response timeout.', 408);
         },
       );
+
+      if(response.statusCode==401){
+        makeLogout();
+      }
+
+      return response;
+
     } catch (e) {
       Debugger.error(title: 'ApiInterceptor.post()', data: e);
       return http.Response('$e', 404);
@@ -67,11 +85,11 @@ class ApiInterceptor implements IApiInterceptor {
       Map<String, String>? headers,
       dynamic body}) async {
     if (!await ConnectivityHelper.hasInternetConnection()) {
-      return http.Response('No Internet Connection!', 503);
+      return http.Response('No Internet Connection!', 504);
     }
     try {
       Uri url = Uri.parse(baseUrl + endPoint);
-      return await http.delete(
+      var response = await http.delete(
         url,
         body: body,
         headers: headers,
@@ -82,6 +100,13 @@ class ApiInterceptor implements IApiInterceptor {
           return http.Response('Server response timeout.', 408);
         },
       );
+
+      if(response.statusCode==401){
+        makeLogout();
+      }
+
+      return response;
+
     } catch (e) {
       Debugger.error(title: 'ApiInterceptor.post()', data: e);
       return http.Response('$e', 404);
@@ -92,11 +117,11 @@ class ApiInterceptor implements IApiInterceptor {
   Future<http.Response> put(
       {required String endPoint, Map<String, String>? headers, body}) async {
     if (!await ConnectivityHelper.hasInternetConnection()) {
-      return http.Response('No Internet Connection!', 503);
+      return http.Response('No Internet Connection!', 504);
     }
     try {
       Uri url = Uri.parse(baseUrl + endPoint);
-      return await http.put(
+      var response = await http.put(
         url,
         body: body,
         headers: headers,
@@ -107,6 +132,13 @@ class ApiInterceptor implements IApiInterceptor {
           return http.Response('Server response timeout.', 408);
         },
       );
+
+      if(response.statusCode==401){
+        makeLogout();
+      }
+
+      return response;
+
     } catch (e) {
       Debugger.error(title: 'ApiInterceptor.post()', data: e);
       return http.Response('$e', 404);
@@ -133,11 +165,22 @@ class ApiInterceptor implements IApiInterceptor {
 
       http.StreamedResponse streamResponse = await requestHttp.send();
       http.Response response = await http.Response.fromStream(streamResponse);
+
+      if(response.statusCode==401){
+        makeLogout();
+      }
+
+      return response;
+
       return response;
     }catch(e){
       Debugger.error(title: 'ApiInterceptor.postFormData()', data: e);
       return http.Response('$e', 404);
     }
 
+  }
+
+  void makeLogout(){
+    Provider.of<AccountProvider>(sl<NavigationService>().navigatorKey.currentContext!,listen: false).logout();
   }
 }

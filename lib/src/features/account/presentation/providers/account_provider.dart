@@ -12,6 +12,7 @@ import 'package:flutter_hishab_khata/src/features/account/domain/interface_accou
 import 'package:flutter_hishab_khata/src/helpers/debugger_helper.dart';
 import 'package:flutter_hishab_khata/src/helpers/widget_helper.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AccountProvider extends ChangeNotifier {
   final IAccountRepository accountRepository;
@@ -111,6 +112,7 @@ class AccountProvider extends ChangeNotifier {
   }
 
   void logout() {
+    Fluttertoast.showToast(msg: "Session Expired! Please login to continue!");
     sl<ICacheRepository>().logout();
     sl<NavigationService>().pushNamedANdRemoveUntil(Routes.loginScreen,);
   }
