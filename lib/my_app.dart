@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hishab_khata/src/core/application/navigation_service.dart';
+import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
 import 'package:flutter_hishab_khata/src/resources/app_themes.dart';
 import 'package:flutter_hishab_khata/src/routes/router_helper.dart';
 import 'package:flutter_hishab_khata/src/routes/routes.dart';
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
           title: 'MuseIQ',
           themeMode: ThemeMode.dark,
           theme: buildLightTheme(context),
-          initialRoute: Routes.homeScreen,
+          initialRoute: sl<TokenService>().token().isEmpty?Routes.loginScreen: Routes.homeScreen,
           //initialRoute: Routes.getOrdersByCustomerScreenRoute("01779685922"),
           onGenerateRoute: RouterHelper.router.generator,
         );

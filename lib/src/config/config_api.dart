@@ -1,6 +1,9 @@
 class ConfigApi{
   static const String baseUrl = "http://ec2-52-91-64-40.compute-1.amazonaws.com:8080";
 
+  //account
+  static const String userLogin = "/api/auth/signin";
+
   //customers
   static const String createCustomer = "/api/customers/create";
   static const String allCustomers = "/api/customers/all";

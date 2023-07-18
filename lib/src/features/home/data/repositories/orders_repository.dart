@@ -24,7 +24,7 @@ class OrdersRepository implements IOrdersRepository {
     var response = await apiInterceptor.post(
       endPoint: ConfigApi.createOrder,
       body: jsonEncode(request.toJson()),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     return response.statusCode;
@@ -34,7 +34,7 @@ class OrdersRepository implements IOrdersRepository {
   Future<int?> deleteOrder(var orderId) async {
     var response = await apiInterceptor.post(
       endPoint: ConfigApi.deleteOrder(orderId),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -52,7 +52,7 @@ class OrdersRepository implements IOrdersRepository {
 
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.allOrders,
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -73,7 +73,7 @@ class OrdersRepository implements IOrdersRepository {
 
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.findOrdersByPhoneNumber(phoneNumber),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -92,7 +92,7 @@ class OrdersRepository implements IOrdersRepository {
   Future<OrderModel?> totalOrdersInfoByPhoneNumber(String phoneNumber) async {
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.calculateOrdersForPhoneNumber(phoneNumber),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -109,7 +109,7 @@ class OrdersRepository implements IOrdersRepository {
     var response = await apiInterceptor.post(
       endPoint: ConfigApi.updateOrder,
       body: jsonEncode(order.toJson()),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     return response.statusCode;
@@ -119,7 +119,7 @@ class OrdersRepository implements IOrdersRepository {
   Future<int?> countTotalOrders() async {
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.countOrders,
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(

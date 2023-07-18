@@ -32,4 +32,30 @@ class CacheRepositoryImpl implements ICacheRepository{
     await sharedPreference.setString('key_app_session_token', '');
   }
 
+  @override
+  String? fetchLoginEmail() {
+    return sharedPreference.getString('key_login_email');
+  }
+
+  @override
+  String? fetchLoginPassword() {
+    return sharedPreference.getString('key_login_password');
+  }
+
+  @override
+  Future<void> rememberLoginCredentials(bool flag) async {
+    await sharedPreference.setBool('key_remember_login_credentials', flag);
+  }
+
+  @override
+  Future<void> saveEmailAndPassword({required String email, required String password}) async {
+    await sharedPreference.setString('key_login_email', email,);
+    await sharedPreference.setString('key_login_password', password,);
+  }
+
+  @override
+  bool fetchRememberLoginCredentials() {
+    return sharedPreference.getBool('key_remember_login_credentials')??false;
+  }
+
 }

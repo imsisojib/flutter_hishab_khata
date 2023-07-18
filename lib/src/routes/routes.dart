@@ -4,6 +4,9 @@ import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_order_a
 class Routes {
   static const String homeScreen = "/";
 
+  //login
+  static const String loginScreen = "/login";
+
   static const String customersScreen = "/customers";
   static const String customerCreateScreen = "/customers/create";
   static const String customerUpdateScreen = "/customers/update";

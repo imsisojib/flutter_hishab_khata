@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hishab_khata/my_app.dart';
 import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_cache_repository.dart';
+import 'package:flutter_hishab_khata/src/features/account/presentation/providers/account_provider.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_customers.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/providers/provider_orders.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
@@ -31,6 +32,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => di.sl<ProviderCustomers>()),
         ChangeNotifierProvider(create: (context) => di.sl<ProviderOrders>()),
+        ChangeNotifierProvider(create: (context) => di.sl<AccountProvider>()),
       ],
       child: const MyApp(),
     ),

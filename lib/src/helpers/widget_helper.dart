@@ -7,6 +7,7 @@ import 'package:flutter_hishab_khata/src/core/presentation/widgets/button_filled
 import 'package:flutter_hishab_khata/src/core/presentation/widgets/button_stroke.dart';
 import 'package:flutter_hishab_khata/src/resources/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class WidgetHelper{
   static void showDialogForConfirmation({
@@ -112,6 +113,22 @@ class WidgetHelper{
           ),
         );
       },
+    );
+  }
+
+  static void showSuccessToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+
+  static void showFailedToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.redAccent,
+      textColor: Colors.white,
     );
   }
 

@@ -5,6 +5,9 @@ import 'package:flutter_hishab_khata/src/core/application/token_service.dart';
 import 'package:flutter_hishab_khata/src/core/data/repositories/cache_repository_impl.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_api_interceptor.dart';
 import 'package:flutter_hishab_khata/src/core/domain/interfaces/interface_cache_repository.dart';
+import 'package:flutter_hishab_khata/src/features/account/data/repositories/account_repository.dart';
+import 'package:flutter_hishab_khata/src/features/account/domain/interface_account_repository.dart';
+import 'package:flutter_hishab_khata/src/features/account/presentation/providers/account_provider.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/repositories/customers_repository.dart';
 import 'package:flutter_hishab_khata/src/features/home/data/repositories/orders_repository.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/interface_customer_repository.dart';
@@ -29,6 +32,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ICacheRepository>(() => CacheRepositoryImpl(sharedPreference: sl()));
   sl.registerLazySingleton<ICustomersRepository>(() => CustomerRepository(apiInterceptor: sl(), tokenService: sl(),));
   sl.registerLazySingleton<IOrdersRepository>(() => OrdersRepository(apiInterceptor: sl(), tokenService: sl(),));
+  sl.registerLazySingleton<IAccountRepository>(() => AccountRepository(apiInterceptor: sl(), tokenService: sl(),));
   //#endregion
 
   ///USE-CASES
@@ -43,6 +47,9 @@ Future<void> init() async {
   ),);
   sl.registerFactory(() => ProviderOrders(
     ordersRepository: sl(),
+  ),);
+  sl.registerFactory(() => AccountProvider(
+    accountRepository: sl(),
   ),);
 
   //interceptors

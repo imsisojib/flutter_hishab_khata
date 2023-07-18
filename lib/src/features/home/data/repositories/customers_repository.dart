@@ -19,7 +19,7 @@ class CustomerRepository implements ICustomersRepository {
     var response = await apiInterceptor.post(
       endPoint: ConfigApi.createCustomer,
       body: jsonEncode(customer.toJson()),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -49,7 +49,7 @@ class CustomerRepository implements ICustomersRepository {
 
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.allCustomers,
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -70,7 +70,7 @@ class CustomerRepository implements ICustomersRepository {
 
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.searchCustomersByName(keyword),
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(
@@ -125,7 +125,7 @@ class CustomerRepository implements ICustomersRepository {
   Future<int?> countTotalCustomers() async {
     var response = await apiInterceptor.get(
       endPoint: ConfigApi.countCustomers,
-      headers: tokenService.getUnAuthHeadersForJson(),
+      headers: tokenService.getHeadersForJson(),
     );
 
     Debugger.debug(

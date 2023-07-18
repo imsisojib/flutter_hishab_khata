@@ -1,4 +1,5 @@
 import 'package:fluro/fluro.dart';
+import 'package:flutter_hishab_khata/src/features/account/presentation/screens/screen_login.dart';
 import 'package:flutter_hishab_khata/src/features/errors/presentation/screens/screen_error.dart';
 import 'package:flutter_hishab_khata/src/features/home/domain/enums/enum_customers_screen_mode.dart';
 import 'package:flutter_hishab_khata/src/features/home/presentation/screens/screen_customer_create.dart';
@@ -17,6 +18,11 @@ class RouterHelper {
   ///Handlers
   static final Handler _homeScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
     return const ScreenHome();
+  });
+
+  //login
+  static final Handler _loginScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
+    return const ScreenLogin();
   });
 
   static final Handler _customersScreenHandler = Handler(handlerFunc: (context, Map<String, dynamic> parameters) {
@@ -86,6 +92,10 @@ class RouterHelper {
 
     //main-nav flow
     router.define(Routes.homeScreen, handler: _homeScreenHandler, transitionType: TransitionType.fadeIn);
+
+    //login
+    router.define(Routes.loginScreen, handler: _loginScreenHandler, transitionType: TransitionType.fadeIn);
+
     router.define(Routes.ordersScreen, handler: _ordersScreenHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.orderCreateScreen, handler: _ordersCreateScreenHandler, transitionType: TransitionType.fadeIn);
     router.define(Routes.orderUpdateScreen, handler: _ordersUpdateScreenHandler, transitionType: TransitionType.fadeIn);
