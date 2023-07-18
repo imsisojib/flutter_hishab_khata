@@ -21,7 +21,9 @@ class _ScreenOrdersState extends State<ScreenOrders> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProviderOrders>(context, listen: false).fetchAllOrders();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ProviderOrders>(context, listen: false).fetchAllOrders();
+    });
   }
 
   @override
