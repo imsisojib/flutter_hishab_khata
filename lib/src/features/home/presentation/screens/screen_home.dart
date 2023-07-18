@@ -22,6 +22,18 @@ class _ScreenHomeState extends State<ScreenHome> {
   List<RequestOrder> requestList = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ProviderOrders>(context, listen: false).countTotalOrders();
+      Provider.of<ProviderCustomers>(context, listen: false).countTotalCustomers();
+    });
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(

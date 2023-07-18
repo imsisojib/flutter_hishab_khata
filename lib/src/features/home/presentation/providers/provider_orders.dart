@@ -15,10 +15,7 @@ class ProviderOrders extends ChangeNotifier {
 
   ProviderOrders({
     required this.ordersRepository,
-  }) {
-    //call to find total customers
-    countTotalOrders();
-  }
+  });
 
   //states
   OrderModel _order = OrderModel();
@@ -113,7 +110,7 @@ class ProviderOrders extends ChangeNotifier {
       total: _order.total,
       paid: _order.paid,
       due: _order.due,
-      discount: _order.discount,
+      discount: _order.discount??0,
       createdAt: _order.createdAt,
     ));
     if (result == null || result <= -1) {

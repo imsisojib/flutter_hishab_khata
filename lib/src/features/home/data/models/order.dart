@@ -13,7 +13,7 @@ class OrderModel {
       {this.id,
         this.total,
         this.paid,
-        this.discount,
+        this.discount = 0,
         this.due,
         this.customer,
         this.createdAt});

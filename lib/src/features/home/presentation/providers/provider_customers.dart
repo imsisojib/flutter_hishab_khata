@@ -9,10 +9,7 @@ import 'package:intl/intl.dart';
 class ProviderCustomers extends ChangeNotifier{
 
   final ICustomersRepository customersRepository;
-  ProviderCustomers({required this.customersRepository,}){
-    //call to find total customers
-    countTotalCustomers();
-  }
+  ProviderCustomers({required this.customersRepository,});
 
   //states
   Customer _customer = Customer();
@@ -51,7 +48,9 @@ class ProviderCustomers extends ChangeNotifier{
   }
 
   //methods
-  void fetchAllCustomers() async{
+  void fetchAllCustomers({bool forceFetch = false}) async{
+    searching = false;
+    if(_allCustomers.isNotEmpty && !forceFetch) return;
     _allCustomers.clear();
     loading = true;
     _allCustomers.addAll(await customersRepository.fetchAllCustomers());
@@ -97,7 +96,7 @@ class ProviderCustomers extends ChangeNotifier{
       //means success
       Fluttertoast.showToast(msg: "Success! Customer info is saved!");
       //update customer list
-      fetchAllCustomers();
+      fetchAllCustomers(forceFetch: true,);
       countTotalCustomers();
       //clear cache
       _customer = Customer();
