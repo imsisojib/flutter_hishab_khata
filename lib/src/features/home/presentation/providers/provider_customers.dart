@@ -51,6 +51,7 @@ class ProviderCustomers extends ChangeNotifier{
   void fetchAllCustomers({bool forceFetch = false}) async{
     searching = false;
     if(_allCustomers.isNotEmpty && !forceFetch) return;
+
     _allCustomers.clear();
     loading = true;
     _allCustomers.addAll(await customersRepository.fetchAllCustomers());

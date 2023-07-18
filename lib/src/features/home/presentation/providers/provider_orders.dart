@@ -69,7 +69,8 @@ class ProviderOrders extends ChangeNotifier {
   }
 
   //methods
-  void fetchAllOrders() async {
+  void fetchAllOrders({bool forceFetch = false}) async {
+    if(_allOrders.isNotEmpty && !forceFetch) return;
     _allOrders.clear();
     loading = true;
     _allOrders.addAll(await ordersRepository.fetchAllOrders());
@@ -120,7 +121,7 @@ class ProviderOrders extends ChangeNotifier {
       //means success
       Fluttertoast.showToast(msg: "Success! Order is saved!");
       //update customer list
-      fetchAllOrders();
+      fetchAllOrders(forceFetch: true,);
       countTotalOrders();
       if(fromHistoryScreen=="1"){
         fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
@@ -163,7 +164,7 @@ class ProviderOrders extends ChangeNotifier {
       //means success
       Fluttertoast.showToast(msg: "Success! Order is updated!");
       //update customer list
-      fetchAllOrders();
+      fetchAllOrders(forceFetch: true);
       fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
       /*if(fromHistoryScreen=="1"){
         fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
@@ -220,7 +221,7 @@ class ProviderOrders extends ChangeNotifier {
     int? responseCode = await ordersRepository.deleteOrder(id);
     if(responseCode==200){
       Fluttertoast.showToast(msg: "Order is deleted.");
-      fetchAllOrders();
+      fetchAllOrders(forceFetch: true,);
       countTotalOrders();
     }else{
       Fluttertoast.showToast(msg: "Failed to delete order!");
