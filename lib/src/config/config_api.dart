@@ -1,5 +1,6 @@
 class ConfigApi{
-  static const String baseUrl = "http://ec2-52-91-64-40.compute-1.amazonaws.com:8080";
+  //static const String baseUrl = "http://ec2-52-91-64-40.compute-1.amazonaws.com:8080";
+  static const String baseUrl = "https://hishabkhata-spring-api.onrender.com";
 
   //account
   static const String userLogin = "/api/auth/signin";
