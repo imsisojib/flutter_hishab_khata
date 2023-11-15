@@ -182,9 +182,10 @@ class ProviderOrders extends ChangeNotifier {
       //update customer list
       fetchAllOrders(forceFetch: true);
       fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
-      /*if(fromHistoryScreen=="1"){
-        fetchAllOrdersByPhoneNumber(_order.customer?.phoneNumber);
-      }*/
+
+      try{
+        sendSmsToCustomer(_requestUpdateOrder);
+      }catch(e){}
 
       //pop back to previous page
       Navigator.pop(sl<NavigationService>().navigatorKey.currentContext!);
